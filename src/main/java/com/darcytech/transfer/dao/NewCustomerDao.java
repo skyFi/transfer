@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -50,7 +51,7 @@ public class NewCustomerDao {
                     .append("\", ")
                     .append("\"_type\" : \"CustomerDetail\", ")
                     .append("\"_id\" : \"")
-                    .append(customerDetail.getId())
+                    .append(StringEscapeUtils.escapeJson(customerDetail.getId()))
                     .append("\" } }")
                     .append("\n");
 
