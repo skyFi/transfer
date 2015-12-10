@@ -51,7 +51,7 @@ public class NewCustomerDao {
                     .append("\", ")
                     .append("\"_type\" : \"CustomerDetail\", ")
                     .append("\"_id\" : \"")
-                    .append(StringEscapeUtils.escapeJson(customerDetail.getId()))
+                    .append(StringEscapeUtils.escapeJava(customerDetail.getId()))
                     .append("\" } }")
                     .append("\n");
 
