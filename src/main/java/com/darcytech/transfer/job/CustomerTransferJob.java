@@ -30,7 +30,7 @@ public class CustomerTransferJob extends AbstractTransferJob{
     }
 
     @Override
-    protected void transferByDay(Date day) throws IOException {
+    protected void transferByDay(Date day) throws Exception {
         customerTransferrer.transferByDay(day);
     }
 

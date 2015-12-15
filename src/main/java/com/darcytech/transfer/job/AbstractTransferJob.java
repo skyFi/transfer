@@ -84,7 +84,7 @@ public abstract class AbstractTransferJob {
 
     protected abstract File getRecordFile() throws IOException;
 
-    protected abstract void transferByDay(Date day) throws IOException;
+    protected abstract void transferByDay(Date day) throws Exception;
 
     protected abstract BlockingQueue<Integer> prepareTokenQueue();
 

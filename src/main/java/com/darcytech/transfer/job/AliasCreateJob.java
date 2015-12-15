@@ -65,10 +65,10 @@ public class AliasCreateJob {
 
                     /**
                      * TradeRate index ang alias example:
-                     * index-> TradeRate_201512_5
+                     * index-> traderate_201512_5
                      * alias-> 54520057_201512_5
                      */
-                    String index = "TradeRate_" + new SimpleDateFormat("yyyyMM").format(startTime) + smallestIndex.substring(smallestIndex.indexOf("_"));
+                    String index = "traderate_" + new SimpleDateFormat("yyyyMM").format(startTime) + smallestIndex.substring(smallestIndex.indexOf("_"));
                     String alias = entry.getKey() + "_" + new SimpleDateFormat("yyyyMM").format(startTime) + smallestIndex.substring(smallestIndex.indexOf("_"));
                     aliasDao.createNewAliases(index, alias, AliasType.TRADERATE);
 
@@ -84,7 +84,7 @@ public class AliasCreateJob {
 
                 newIndexDocCounts.put(smallestIndex, newIndexDocCounts.get(smallestIndex) + entry.getValue());
                 logger.debug("user#" + entry.getKey() + ",aliasIndex: " + smallestIndex + " -> " + count + "/" + userDocCounts.size());
-                logger.debug("index doc counts: " + String.valueOf(newIndexDocCounts));
+//                logger.debug("index doc counts: " + String.valueOf(newIndexDocCounts));
             }
         }
     }
@@ -96,7 +96,7 @@ public class AliasCreateJob {
         }
 
         Long smallestIndexDoc = Long.MAX_VALUE;
-        String smallestIndexKey = "Customer_0";
+        String smallestIndexKey = "customer_0";
         for (Map.Entry<String, Long> entry : newIndexDocCounts.entrySet()) {
             if (smallestIndexDoc > entry.getValue()) {
                 smallestIndexDoc = entry.getValue();

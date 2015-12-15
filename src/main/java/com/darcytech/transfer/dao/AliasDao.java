@@ -66,7 +66,7 @@ public class AliasDao {
 
         List<String> newAliases = new ArrayList<>();
         for (int i = 0; i < customerIndexCount; i++) {
-            JsonNode customerAliasesNode = objectNode.path("Customer_" + i).path("aliases");
+            JsonNode customerAliasesNode = objectNode.path("customer_" + i).path("aliases");
             Iterator<String> customerFieldName = customerAliasesNode.fieldNames();
             while (customerFieldName.hasNext()) {
                 String customerAlias = customerFieldName.next();
@@ -77,7 +77,7 @@ public class AliasDao {
             Date endTime = simpleDateFormat.parse(tradeRateIndexEndLine);
             while (startTime.before(endTime)){
 
-                JsonNode tradeRateAliasesNode = objectNode.path("TradeRate_" + new SimpleDateFormat("yyyyMM").format(startTime) + "_" + i).path("aliases");
+                JsonNode tradeRateAliasesNode = objectNode.path("traderate_" + new SimpleDateFormat("yyyyMM").format(startTime) + "_" + i).path("aliases");
                 Iterator<String> tradeRateFieldNames = tradeRateAliasesNode.fieldNames();
                 while (tradeRateFieldNames.hasNext()) {
                     String tradeRateAlias = tradeRateFieldNames.next();
@@ -131,7 +131,7 @@ public class AliasDao {
 
         Map<String, Long> indexDocCounts = new HashMap<>();
         for (int i = 0; i < customerIndexCount; i++) {
-            String indexName = "Customer_" + i;
+            String indexName = "customer_" + i;
             Long indexDocsCount = countIndexDocs(indexName);
             indexDocCounts.put(indexName, indexDocsCount);
         }

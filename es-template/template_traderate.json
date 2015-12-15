@@ -1,0 +1,73 @@
+{
+  "order": 0,
+  "template": "traderate_*",
+  "settings": {
+    "index": {
+      "refresh_interval": "1m",
+      "analysis": {
+        "analyzer": {
+          "4gram_analyzer": {
+            "type": "custom",
+            "tokenizer": "4Gram"
+          }
+        },
+        "tokenizer": {
+          "4Gram": {
+            "type": "nGram",
+            "min_gram": "1",
+            "max_gram": "4"
+          }
+        }
+      },
+      "number_of_shards": "1",
+      "number_of_replicas": "1"
+    }
+  },
+  "mappings": {
+    "TradeRate": {
+      "dynamic": "strict",
+      "_all": {
+        "enabled": false
+      },
+      "properties": {
+        "nick": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "result": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "itemId": {
+          "type": "long"
+        },
+        "orderId": {
+          "type": "long"
+        },
+        "customerId": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "createdTime": {
+          "type": "date"
+        },
+        "id": {
+          "index": "not_analyzed",
+          "type": "string"
+        },
+        "userId": {
+          "type": "long"
+        },
+        "content": {
+          "analyzer": "4gram_analyzer",
+          "index_options": "docs",
+          "type": "string"
+        },
+        "tradeId": {
+          "type": "long"
+        }
+      }
+    }
+  },
+  "aliases": {}
+}

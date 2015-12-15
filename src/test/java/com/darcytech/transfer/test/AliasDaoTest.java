@@ -27,7 +27,7 @@ public class AliasDaoTest {
     private AliasDao aliasDao;
 
     @Test
-    public void testGetAliases() throws IOException {
+    public void testGetAliases() throws Exception {
         List<String> aliases = aliasDao.getNewAliases();
         Assert.assertFalse(aliases.isEmpty());
     }

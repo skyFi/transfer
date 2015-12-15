@@ -30,7 +30,7 @@ public class TradeRateTransferJob extends AbstractTransferJob{
     }
 
     @Override
-    protected void transferByDay(Date day) throws IOException {
+    protected void transferByDay(Date day) throws Exception {
         tradeRateTransferrer.transferByDay(day);
     }
 

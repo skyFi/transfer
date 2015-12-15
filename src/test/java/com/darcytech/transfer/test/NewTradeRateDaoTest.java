@@ -19,7 +19,7 @@ public class NewTradeRateDaoTest extends BaseTest{
     private NewTradeRateDao newTradeRateDao;
 
     @Test
-    public void testBulkSave() throws IOException {
+    public void testBulkSave() throws Exception {
         TradeRate tradeRate = new TradeRate();
         List<TradeRate> tradeRates = new ArrayList<>();
 
