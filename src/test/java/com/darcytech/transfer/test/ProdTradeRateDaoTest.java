@@ -50,4 +50,9 @@ public class ProdTradeRateDaoTest {
         }
         Assert.assertFalse(searchHits.getHits().length == 0);
     }
+
+    @Test
+    public void testGetTradeRateByMouthDocCounts() throws Exception {
+        prodTradeRateDao.getTradeRateByMouthDocCounts();
+    }
 }

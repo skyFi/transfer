@@ -1,6 +1,5 @@
 package com.darcytech.transfer.transfer;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -18,7 +17,7 @@ public abstract class AbstractTransferrer {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public void transferByDay(Date day) throws IOException {
+    public void transferByDay(Date day) throws Exception {
         Date start = new DateTime(day).withTimeAtStartOfDay().toDate();
         Date end = new DateTime(day).plusDays(1).withTimeAtStartOfDay().toDate();
         EsScroller esScroll = getScroller(start, end);
@@ -29,7 +28,7 @@ public abstract class AbstractTransferrer {
         }
     }
 
-    private void scrollAndTransfer(EsScroller esScroll, String day) throws IOException {
+    private void scrollAndTransfer(EsScroller esScroll, String day) throws Exception {
 
         int count = 0;
         while (true) {
@@ -43,7 +42,7 @@ public abstract class AbstractTransferrer {
         }
     }
 
-    protected abstract void bulkTransfer(SearchHits searchHits) throws IOException;
+    protected abstract void bulkTransfer(SearchHits searchHits) throws Exception;
 
     protected abstract EsScroller getScroller(Date start, Date end);
 

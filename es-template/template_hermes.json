@@ -1,0 +1,399 @@
+[
+  {
+    "order": 0,
+    "template": "Customer_*",
+    "settings": {
+      "index": {
+        "refresh_interval": "1m",
+        "analysis": {
+          "analyzer": {
+            "4gram_analyzer": {
+              "type": "custom",
+              "tokenizer": "4Gram"
+            }
+          },
+          "tokenizer": {
+            "4Gram": {
+              "type": "nGram",
+              "min_gram": "1",
+              "max_gram": "4"
+            }
+          }
+        },
+        "number_of_shards": "5",
+        "number_of_replicas": "1"
+      }
+    },
+    "mappings": {
+      "CustomerDetail": {
+        "dynamic": "strict",
+        "_all": {
+          "enabled": false
+        },
+        "properties": {
+          "lastPayTime": {
+            "type": "date"
+          },
+          "city": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "buyerId": {
+            "type": "long"
+          },
+          "lastCreateTime": {
+            "type": "date"
+          },
+          "receiveSms": {
+            "type": "boolean"
+          },
+          "nick": {
+            "index": "not_analyzed",
+            "type": "string",
+            "fields": {
+              "keywords": {
+                "analyzer": "4gram_analyzer",
+                "index_options": "docs",
+                "type": "string"
+              }
+            }
+          },
+          "itemNum": {
+            "type": "long"
+          },
+          "groupIds": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "id": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "relationSource": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "state": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "email": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "address": {
+            "index": "no",
+            "type": "string"
+          },
+          "customerGroupIds": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "mobile": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "closeTradeAmount": {
+            "type": "double"
+          },
+          "trades": {
+            "dynamic": "strict",
+            "include_in_all": false,
+            "type": "nested",
+            "properties": {
+              "payTime": {
+                "type": "date"
+              },
+              "buyerRate": {
+                "type": "boolean"
+              },
+              "shippingType": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "receivedPayment": {
+                "type": "double"
+              },
+              "title": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "type": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "receiverCity": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "itemNum": {
+                "type": "long"
+              },
+              "consignTime": {
+                "type": "date"
+              },
+              "sellerFlag": {
+                "type": "long"
+              },
+              "paymentWithoutPostFee": {
+                "type": "double"
+              },
+              "receiverDistrict": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "createdTime": {
+                "type": "date"
+              },
+              "payment": {
+                "type": "double"
+              },
+              "id": {
+                "index": "not_analyzed",
+                "type": "long"
+              },
+              "sellerRate": {
+                "type": "boolean"
+              },
+              "stepPaidFee": {
+                "type": "double"
+              },
+              "receiveMobile": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "receiverName": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "postFee": {
+                "type": "double"
+              },
+              "timeoutActionTime": {
+                "type": "date"
+              },
+              "taobaoLastModifyTime": {
+                "type": "date"
+              },
+              "stepTradeStatus": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "receiverAddress": {
+                "index": "no",
+                "type": "string"
+              },
+              "buyerMessage": {
+                "analyzer": "4gram_analyzer",
+                "index_options": "docs",
+                "type": "string"
+              },
+              "tradeFrom": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "shippingNo": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "lastModifyTime": {
+                "type": "date"
+              },
+              "receiverState": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "shippingCompanyName": {
+                "index": "not_analyzed",
+                "type": "string"
+              },
+              "orders": {
+                "dynamic": "strict",
+                "include_in_all": false,
+                "type": "nested",
+                "properties": {
+                  "itemTitle": {
+                    "analyzer": "4gram_analyzer",
+                    "index_options": "docs",
+                    "type": "string"
+                  },
+                  "num": {
+                    "type": "long"
+                  },
+                  "refundStatus": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                  },
+                  "itemId": {
+                    "type": "long"
+                  },
+                  "orderPayment": {
+                    "type": "double"
+                  },
+                  "consignTime": {
+                    "type": "date"
+                  },
+                  "price": {
+                    "type": "double"
+                  },
+                  "orderFrom": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                  },
+                  "payment": {
+                    "type": "double"
+                  },
+                  "id": {
+                    "index": "not_analyzed",
+                    "type": "long"
+                  },
+                  "itemImgUrl": {
+                    "index": "no",
+                    "type": "string"
+                  },
+                  "skuId": {
+                    "index": "not_analyzed",
+                    "type": "string"
+                  }
+                }
+              },
+              "endTime": {
+                "type": "date"
+              },
+              "sellerMemo": {
+                "analyzer": "4gram_analyzer",
+                "index_options": "docs",
+                "type": "string"
+              },
+              "status": {
+                "index": "not_analyzed",
+                "type": "string"
+              }
+            }
+          },
+          "userId": {
+            "type": "long"
+          },
+          "realName": {
+            "index": "not_analyzed",
+            "type": "string",
+            "fields": {
+              "keywords": {
+                "analyzer": "4gram_analyzer",
+                "index_options": "docs",
+                "type": "string"
+              }
+            }
+          },
+          "tradeAmount": {
+            "type": "double"
+          },
+          "tradeCount": {
+            "type": "long"
+          },
+          "bizOrderId": {
+            "type": "long"
+          },
+          "closeTradeCount": {
+            "type": "long"
+          },
+          "district": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "grade": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "lastModifyTime": {
+            "type": "date"
+          },
+          "lastTradeTime": {
+            "type": "date"
+          },
+          "inBlacklist": {
+            "type": "boolean"
+          },
+          "status": {
+            "index": "not_analyzed",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "aliases": {}
+  },
+  {
+    "order": 1,
+    "template": "TradeRate_*",
+    "settings": {
+      "index": {
+        "refresh_interval": "1m",
+        "analysis": {
+          "analyzer": {
+            "4gram_analyzer": {
+              "type": "custom",
+              "tokenizer": "4Gram"
+            }
+          },
+          "tokenizer": {
+            "4Gram": {
+              "type": "nGram",
+              "min_gram": "1",
+              "max_gram": "4"
+            }
+          }
+        },
+        "number_of_shards": "1",
+        "number_of_replicas": "1"
+      }
+    },
+    "mappings": {
+      "TradeRate": {
+        "dynamic": "strict",
+        "_all": {
+          "enabled": false
+        },
+        "properties": {
+          "nick": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "result": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "itemId": {
+            "type": "long"
+          },
+          "orderId": {
+            "type": "long"
+          },
+          "customerId": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "createdTime": {
+            "type": "date"
+          },
+          "id": {
+            "index": "not_analyzed",
+            "type": "string"
+          },
+          "userId": {
+            "type": "long"
+          },
+          "content": {
+            "analyzer": "4gram_analyzer",
+            "index_options": "docs",
+            "type": "string"
+          },
+          "tradeId": {
+            "type": "long"
+          }
+        }
+      }
+    },
+    "aliases": {}
+  }
+]

@@ -37,7 +37,7 @@ public class TradeRateTransferrer extends AbstractTransferrer{
     private ProdCustomerDao prodCustomerDao;
 
     @Override
-    protected void bulkTransfer(SearchHits searchHits) throws IOException {
+    protected void bulkTransfer(SearchHits searchHits) throws Exception {
         List<TradeRate> tradeRates = new ArrayList<>();
         Set<String> existsUsers = prodCustomerDao.getExistsUsers();
         for (SearchHit customerSearchHit : searchHits) {
