@@ -16,12 +16,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import com.darcytech.transfer.job.AliasCreateJob;
@@ -41,6 +43,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
+@EntityScan("com.darcytech.transfer.model")
+@EnableJpaRepositories("com.darcytech.transfer.dao")
 public class TransferMain {
 
     private static final Logger logger = LoggerFactory.getLogger(TransferMain.class);
@@ -78,7 +82,7 @@ public class TransferMain {
             logger.info("transferring traderate complete.");
 
             logger.info("Application is closing......");
-            ((ConfigurableApplicationContext)context).close();
+            ((ConfigurableApplicationContext) context).close();
             logger.info("Application is closed.");
 
         } catch (Exception e) {
