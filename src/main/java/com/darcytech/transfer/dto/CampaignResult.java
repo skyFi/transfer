@@ -54,6 +54,11 @@ public class CampaignResult {
 
     private List<StepResult> stepResultList = new ArrayList<>();
 
+    /**
+     * 最后修改时间
+     */
+    private Date lastModifyTime;
+
     public String getId() {
         return id;
     }
@@ -172,5 +177,13 @@ public class CampaignResult {
 
     public void setStepResultList(List<StepResult> stepResultList) {
         this.stepResultList = stepResultList;
+    }
+
+    public Date getLastModifyTime() {
+        return lastModifyTime;
+    }
+
+    public void setLastModifyTime(Date lastModifyTime) {
+        this.lastModifyTime = lastModifyTime;
     }
 }

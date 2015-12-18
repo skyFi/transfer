@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.darcytech.transfer.job.AliasCreateJob;
 import com.darcytech.transfer.job.CustomerTransferJob;
@@ -45,6 +46,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 @ComponentScan
 @EntityScan("com.darcytech.transfer.model")
 @EnableJpaRepositories("com.darcytech.transfer.dao")
+@EnableTransactionManagement
 public class TransferMain {
 
     private static final Logger logger = LoggerFactory.getLogger(TransferMain.class);

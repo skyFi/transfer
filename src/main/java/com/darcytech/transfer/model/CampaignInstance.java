@@ -1,6 +1,5 @@
 package com.darcytech.transfer.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,153 +15,49 @@ import com.darcytech.transfer.enumeration.InstanceStatus;
 
 /**
  * User: dixi
- * Time: 2015/12/16 10:42
+ * Time: 2015/12/17 17:00
  */
 @Entity
 public class CampaignInstance extends BaseModel {
 
-    /**
-     * 用户Id
-     */
-    private Long userId;
+    private Integer currentStep;
 
-    /**
-     * 活动id
-     */
-    private Long campaignId;
-
-    /**
-     * 活动类型
-     */
-    private Long campaignTypeId;
-
-    /**
-     * 客户昵称
-     */
-    private String buyerNick;
-
-    /**
-     * 手机号码
-     */
-    private String mobile;
-
-    /**
-     * 客户真实姓名
-     */
-    private String buyerRealName;
-
-    /**
-     * 当前应执行步骤
-     */
-    private int currentStep;
-
-    /**
-     * 创建时间
-     */
-    private Date createDate;
-
-    /**
-     * 开始时间
-     */
     private Date startDate;
 
-    /**
-     * 结束时间
-     */
     private Date endDate;
 
-    /**
-     * 总交易量
-     */
-    private int tradeNum;
+    private Long campaignId;
 
-    /**
-     * 是否营销过：至少执行过1个成功动作的买家
-     */
-    private Boolean contacted;
-    /**
-     * 营销任务是否成功
-     */
-    private Boolean succeed;
+    private Long campaignTypeId;
 
-    /**
-     * 总交易金额
-     */
-    private BigDecimal totalPayment;
+    private Long customerId;
 
-    /**
-     * 上一步触发时间
-     */
-    private Date lastStepTriggerTime;
+    private String mobile;
 
+    private Long userId;
+
+    private Date createDate;
+
+    private String resultId;
     /**
-     * 状态
+     * step累计交易
      */
+    @Type(type = "JSONString", parameters = {
+            @Parameter(name = "targetClass", value = "java.lang.String"),
+            @Parameter(name = "isArray", value = "true")})
+    private List<String> totalTrades = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private InstanceStatus status;
 
-    public Long getUserId() {
-        return userId;
-    }
+    private Date lastStepTriggerTime;
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getCampaignId() {
-        return campaignId;
-    }
-
-    public void setCampaignId(Long campaignId) {
-        this.campaignId = campaignId;
-    }
-
-    public Long getCampaignTypeId() {
-        return campaignTypeId;
-    }
-
-    public void setCampaignTypeId(Long campaignTypeId) {
-        this.campaignTypeId = campaignTypeId;
-    }
-
-    public String getBuyerNick() {
-        return buyerNick;
-    }
-
-    public void setBuyerNick(String buyerNick) {
-        this.buyerNick = buyerNick;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getBuyerRealName() {
-        return buyerRealName;
-    }
-
-    public void setBuyerRealName(String buyerRealName) {
-        this.buyerRealName = buyerRealName;
-    }
-
-    public int getCurrentStep() {
+    public Integer getCurrentStep() {
         return currentStep;
     }
 
-    public void setCurrentStep(int currentStep) {
+    public void setCurrentStep(Integer currentStep) {
         this.currentStep = currentStep;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
     }
 
     public Date getStartDate() {
@@ -181,44 +76,68 @@ public class CampaignInstance extends BaseModel {
         this.endDate = endDate;
     }
 
-    public int getTradeNum() {
-        return tradeNum;
+    public Long getCampaignId() {
+        return campaignId;
     }
 
-    public void setTradeNum(int tradeNum) {
-        this.tradeNum = tradeNum;
+    public void setCampaignId(Long campaignId) {
+        this.campaignId = campaignId;
     }
 
-    public Boolean getContacted() {
-        return contacted;
+    public Long getCampaignTypeId() {
+        return campaignTypeId;
     }
 
-    public void setContacted(Boolean contacted) {
-        this.contacted = contacted;
+    public void setCampaignTypeId(Long campaignTypeId) {
+        this.campaignTypeId = campaignTypeId;
     }
 
-    public Boolean getSucceed() {
-        return succeed;
+    public Long getCustomerId() {
+        return customerId;
     }
 
-    public void setSucceed(Boolean succeed) {
-        this.succeed = succeed;
+    public void setCustomerId(Long customerId) {
+        this.customerId = customerId;
     }
 
-    public BigDecimal getTotalPayment() {
-        return totalPayment;
+    public String getMobile() {
+        return mobile;
     }
 
-    public void setTotalPayment(BigDecimal totalPayment) {
-        this.totalPayment = totalPayment;
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
-    public Date getLastStepTriggerTime() {
-        return lastStepTriggerTime;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setLastStepTriggerTime(Date lastStepTriggerTime) {
-        this.lastStepTriggerTime = lastStepTriggerTime;
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getResultId() {
+        return resultId;
+    }
+
+    public void setResultId(String resultId) {
+        this.resultId = resultId;
+    }
+
+    public List<String> getTotalTrades() {
+        return totalTrades;
+    }
+
+    public void setTotalTrades(List<String> totalTrades) {
+        this.totalTrades = totalTrades;
     }
 
     public InstanceStatus getStatus() {
@@ -227,5 +146,13 @@ public class CampaignInstance extends BaseModel {
 
     public void setStatus(InstanceStatus status) {
         this.status = status;
+    }
+
+    public Date getLastStepTriggerTime() {
+        return lastStepTriggerTime;
+    }
+
+    public void setLastStepTriggerTime(Date lastStepTriggerTime) {
+        this.lastStepTriggerTime = lastStepTriggerTime;
     }
 }
