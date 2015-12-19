@@ -24,15 +24,20 @@ public class CampaignResultDaoEs {
     @Autowired
     private Client client;
 
-    public List<CampaignResult> searchScrollByLastModifyTime(Date endTimeLine) {
-        BoolQueryBuilder booleanQueryBuilder = QueryBuilders.boolQuery()
-                .must(QueryBuilders.rangeQuery("lastModifyTime").to(endTimeLine.getTime()));
+    public List<CampaignResult> searchScrollByLastModifyTime(Date startTime, Date endTime, int pageSize) {
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        if (startTime != null) {
+            queryBuilder.must(QueryBuilders.rangeQuery("lastModifyTime").from(startTime.getTime()));
+        }
+        if (endTime != null) {
+            queryBuilder.must(QueryBuilders.rangeQuery("lastModifyTime").to(endTime.getTime()));
+        }
 
         SearchResponse scrollResp = client.prepareSearch(CampaignResult.class.getSimpleName())
                 .setSearchType(SearchType.SCAN)
                 .setScroll(new TimeValue(60000))
-                .setQuery(booleanQueryBuilder)
-                .setSize(100).execute().actionGet();
+                .setQuery(queryBuilder)
+                .setSize(pageSize).execute().actionGet();
 
         return null;
     }

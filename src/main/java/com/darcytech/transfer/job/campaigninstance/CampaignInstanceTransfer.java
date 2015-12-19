@@ -39,8 +39,8 @@ public class CampaignInstanceTransfer implements CampaignInstanceNewTransfer {
     private int pageSize = 1000;
 
     @Override
-    public void transferAndSave(Date endTimeLine) {
-        int totalSize = instanceDao.countCampaignInstanceByResultIdIsNull(endTimeLine);
+    public void transferAndSave(Date startTime, Date endTime) {
+        int totalSize = instanceDao.countCampaignInstanceByResultIdIsNull(startTime, endTime);
         int totalPage = 1;
         if (totalSize > pageSize) {
             totalPage = totalSize % pageSize == 0 ? totalSize / pageSize : (totalSize / pageSize) + 1;
@@ -48,7 +48,7 @@ public class CampaignInstanceTransfer implements CampaignInstanceNewTransfer {
 
         for (int pageNO = 1; pageNO <= totalPage; pageNO++) {
             List<CampaignInstance> instances = instanceDao
-                    .findCampaignInstanceByResultIdIsNull(endTimeLine, pageNO, pageSize);
+                    .findCampaignInstanceByResultIdIsNull(startTime, endTime, pageNO, pageSize);
 
             Map<Long, String> customerNickMap = getCustomerNickMap(instances);
 

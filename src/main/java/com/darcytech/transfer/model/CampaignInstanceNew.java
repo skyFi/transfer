@@ -101,6 +101,11 @@ public class CampaignInstanceNew extends BaseModel {
     @Enumerated(EnumType.STRING)
     private InstanceStatus status;
 
+    @Type(type = "JSONString", parameters = {
+            @Parameter(name = "targetClass", value = "java.lang.String"),
+            @Parameter(name = "isArray", value = "true")})
+    private List<CampaignStepInstance> stepInstances = new ArrayList<>();
+
     public Long getUserId() {
         return userId;
     }
@@ -227,5 +232,13 @@ public class CampaignInstanceNew extends BaseModel {
 
     public void setStatus(InstanceStatus status) {
         this.status = status;
+    }
+
+    public List<CampaignStepInstance> getStepInstances() {
+        return stepInstances;
+    }
+
+    public void setStepInstances(List<CampaignStepInstance> stepInstances) {
+        this.stepInstances = stepInstances;
     }
 }
