@@ -33,7 +33,7 @@ public class CampaignInstanceDaoTest extends BaseTest {
     @Test
     public void testFindCampaignInstanceByResultIdIsNull() throws Exception {
         List<CampaignInstance> instanceList = instanceDao.
-                findCampaignInstanceByResultIdIsNull(operateEndTimeLine, 1, 10);
+                findCampaignInstanceByResultIdIsNull(null,operateEndTimeLine, 1, 10);
         logger.info("end time :{} success size:{}", operateEndTimeLine, instanceList.size());
         for (CampaignInstance instance : instanceList) {
             logger.info("instance id :{}", instance.getId());
@@ -42,7 +42,7 @@ public class CampaignInstanceDaoTest extends BaseTest {
 
     @Test
     public void testCountCampaignInstanceByResultIdIsNull() throws Exception {
-        int count = instanceDao.countCampaignInstanceByResultIdIsNull(operateEndTimeLine);
+        int count = instanceDao.countCampaignInstanceByResultIdIsNull(null,operateEndTimeLine);
         logger.info("campaign instance total size :{}", count);
         int pageSize = 100;
 

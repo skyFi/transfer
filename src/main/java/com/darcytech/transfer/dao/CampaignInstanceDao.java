@@ -26,6 +26,7 @@ import com.google.common.collect.Maps;
  * Time: 2015/12/17 16:12
  */
 @Repository
+@Transactional
 public class CampaignInstanceDao {
 
     @PersistenceContext

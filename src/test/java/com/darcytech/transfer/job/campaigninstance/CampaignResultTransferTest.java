@@ -16,13 +16,13 @@ import com.darcytech.transfer.BaseTest;
 
 /**
  * User: dixi
- * Time: 2015/12/18 16:14
+ * Time: 2015/12/19 14:08
  */
-public class CampaignInstanceTransferTest extends BaseTest {
-    private static final Logger logger = LoggerFactory.getLogger(CampaignInstanceTransferTest.class);
+public class CampaignResultTransferTest extends BaseTest {
+    private static final Logger logger = LoggerFactory.getLogger(CampaignResultTransferTest.class);
 
     @Autowired
-    private CampaignInstanceTransfer instanceTransfer;
+    private CampaignResultTransfer resultTransfer;
 
     private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -37,7 +37,12 @@ public class CampaignInstanceTransferTest extends BaseTest {
         Date startTime = StringUtils.isEmpty(startLine) ? null : DateTime.parse(startLine, formatter).toDate();
         Date endTime = StringUtils.isEmpty(endLine) ? null : DateTime.parse(endLine, formatter).toDate();
 
-        instanceTransfer.transferAndSave(startTime, endTime);
+        resultTransfer.transferAndSave(startTime, endTime);
         logger.info("success");
+    }
+
+    @Test
+    public void test() throws Exception{
+
     }
 }

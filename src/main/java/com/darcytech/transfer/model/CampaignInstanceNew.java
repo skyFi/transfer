@@ -102,7 +102,7 @@ public class CampaignInstanceNew extends BaseModel {
     private InstanceStatus status;
 
     @Type(type = "JSONString", parameters = {
-            @Parameter(name = "targetClass", value = "java.lang.String"),
+            @Parameter(name = "targetClass", value = "com.darcytech.transfer.model.CampaignStepInstance"),
             @Parameter(name = "isArray", value = "true")})
     private List<CampaignStepInstance> stepInstances = new ArrayList<>();
 

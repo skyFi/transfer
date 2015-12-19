@@ -40,6 +40,7 @@ public class CampaignInstanceTransfer implements CampaignInstanceNewTransfer {
 
     @Override
     public void transferAndSave(Date startTime, Date endTime) {
+        logger.info("transfer campaign instance from instance start ,time range is {} ~ {}", startTime, endTime);
         int totalSize = instanceDao.countCampaignInstanceByResultIdIsNull(startTime, endTime);
         int totalPage = 1;
         if (totalSize > pageSize) {
@@ -81,6 +82,8 @@ public class CampaignInstanceTransfer implements CampaignInstanceNewTransfer {
                     , totalSize, totalPage, pageNO);
 
         }
+
+        logger.info("transfer campaign instance from instance end");
 
     }
 

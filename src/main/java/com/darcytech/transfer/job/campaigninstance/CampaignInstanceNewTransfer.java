@@ -8,5 +8,5 @@ import java.util.Date;
  */
 public interface CampaignInstanceNewTransfer {
 
-    void transferAndSave(Date startTime, Date endTime);
+    void transferAndSave(Date startTime, Date endTime) throws Exception;
 }
