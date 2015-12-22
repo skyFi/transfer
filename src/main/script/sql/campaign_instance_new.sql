@@ -1,0 +1,22 @@
+CREATE TABLE `campaign_instance_new` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `version` bigint(20) NOT NULL,
+  `buyer_nick` varchar(255) DEFAULT NULL,
+  `buyer_real_name` varchar(255) DEFAULT NULL,
+  `campaign_id` bigint(20) DEFAULT NULL,
+  `campaign_type_id` bigint(20) DEFAULT NULL,
+  `contacted` bit(1) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `current_step` int(11) NOT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `last_step_trigger_time` datetime DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `step_instances` longtext,
+  `succeed` bit(1) DEFAULT NULL,
+  `total_payment` decimal(19,2) DEFAULT NULL,
+  `trade_num` int(11) NOT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -1,0 +1,21 @@
+CREATE TABLE `refund` (
+  `id` varchar(255) NOT NULL,
+  `buyer_nick` varchar(255) DEFAULT NULL,
+  `company_name` varchar(255) DEFAULT NULL,
+  `created_time` datetime DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `good_return_time` datetime DEFAULT NULL,
+  `good_status` varchar(255) DEFAULT NULL,
+  `has_good_return` bit(1) NOT NULL,
+  `order_id` bigint(20) DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
+  `refund_fee` double NOT NULL,
+  `refund_order_status` varchar(255) DEFAULT NULL,
+  `sid` varchar(255) DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
+  `taobao_modified` datetime DEFAULT NULL,
+  `trade_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `version` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -28,7 +28,13 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.darcytech.transfer.job.ActionRecordTransferJob;
+import com.darcytech.transfer.job.AliasCreateJob;
+import com.darcytech.transfer.job.CustomerTransferJob;
+import com.darcytech.transfer.job.MarketingJobResultOrderTransferJob;
+import com.darcytech.transfer.job.MarketingJobResultTransferJob;
 import com.darcytech.transfer.job.RefundTransferJob;
+import com.darcytech.transfer.job.TradeRateTransferJob;
+import com.darcytech.transfer.job.TradeTransferJob;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -61,45 +67,50 @@ public class TransferMain {
         try {
             ApplicationContext context = SpringApplication.run(TransferMain.class, args);
 
-//            logger.info("start creating aliases......");
-//            AliasCreateJob aliasCreateJob = context.getBean(AliasCreateJob.class);
-//            aliasCreateJob.createAliases();
-//            logger.info("creating aliases complete.");
-//
-//            logger.info("start transferring customers......");
-//            CustomerTransferJob customerTransferJob = context.getBean(CustomerTransferJob.class);
-//            customerTransferJob.doTransfer();
-//            logger.info("transferring customer complete.");
-//
-//            logger.info("start transferring trades and orders......");
-//            TradeTransferJob tradeTransferJob = context.getBean(TradeTransferJob.class);
-//            tradeTransferJob.doTransfer();
-//            logger.info("transferring trades and orders complete.");
-//
-//            logger.info("start transferring traderate......");
-//            TradeRateTransferJob tradeRateTransferJob = context.getBean(TradeRateTransferJob.class);
-//            tradeRateTransferJob.doTransfer();
-//            logger.info("transferring traderate complete.");
-//
-//            logger.info("start transferring marketing job result......");
-//            MarketingJobResultTransferJob marketingJobResultJob = context.getBean(MarketingJobResultTransferJob.class);
-//            marketingJobResultJob.doTransfer();
-//            logger.info("transferring marketing job result complete.");
-//
-//            logger.info("start transferring marketing job result......");
-//            MarketingJobResultOrderTransferJob marketingJobResultOrderJob = context.getBean(MarketingJobResultOrderTransferJob.class);
-//            marketingJobResultOrderJob.doTransfer();
-//            logger.info("transferring marketing job result complete.");
-//
+            logger.info("start es to es transferring......");
+            logger.info("start creating aliases......");
+            AliasCreateJob aliasCreateJob = context.getBean(AliasCreateJob.class);
+            aliasCreateJob.createAliases();
+            logger.info("creating aliases complete.");
+
+            logger.info("start transferring customers......");
+            CustomerTransferJob customerTransferJob = context.getBean(CustomerTransferJob.class);
+            customerTransferJob.doTransfer();
+            logger.info("transferring customer complete.");
+
+            logger.info("start transferring trades and orders......");
+            TradeTransferJob tradeTransferJob = context.getBean(TradeTransferJob.class);
+            tradeTransferJob.doTransfer();
+            logger.info("transferring trades and orders complete.");
+
+            logger.info("start transferring traderate......");
+            TradeRateTransferJob tradeRateTransferJob = context.getBean(TradeRateTransferJob.class);
+            tradeRateTransferJob.doTransfer();
+            logger.info("transferring traderate complete.");
+
+            logger.info("transferring es to es complete.");
+
+            logger.info("start transferring es to mySQL......");
+            logger.info("start transferring marketing job result......");
+            MarketingJobResultTransferJob marketingJobResultJob = context.getBean(MarketingJobResultTransferJob.class);
+            marketingJobResultJob.doTransfer();
+            logger.info("transferring marketing job result complete.");
+
+            logger.info("start transferring marketing job result......");
+            MarketingJobResultOrderTransferJob marketingJobResultOrderJob = context.getBean(MarketingJobResultOrderTransferJob.class);
+            marketingJobResultOrderJob.doTransfer();
+            logger.info("transferring marketing job result complete.");
+
             logger.info("start transferring action record......");
             ActionRecordTransferJob actionRecordTransferJob = context.getBean(ActionRecordTransferJob.class);
             actionRecordTransferJob.doTransfer();
             logger.info("transferring action record complete.");
 
-//            logger.info("start transferring refund......");
-//            RefundTransferJob refundTransferJob = context.getBean(RefundTransferJob.class);
-//            refundTransferJob.doTransfer();
-//            logger.info("transferring refund complete.");
+            logger.info("start transferring refund......");
+            RefundTransferJob refundTransferJob = context.getBean(RefundTransferJob.class);
+            refundTransferJob.doTransfer();
+            logger.info("transferring refund complete.");
+            logger.info("transferring es to mySQL complete.");
 
             logger.info("Application is closing......");
             ((ConfigurableApplicationContext) context).close();
