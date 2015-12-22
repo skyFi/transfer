@@ -16,6 +16,7 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,39 +48,48 @@ public abstract class AbstractTransferJob {
     private TransferRecorder transferRecorder;
 
     public void doTransfer() throws Exception {
-        List<Date> dateList = prepareTransferDays();
+        if (StringUtils.isNotEmpty(endLine)) {
+            List<Date> dateList = prepareTransferDays();
 
-        final Queue<Date> dateQueue = new ConcurrentLinkedQueue<>(dateList);
-        final BlockingQueue<Integer> tokens = prepareTokenQueue();
-        final CountDownLatch countDownLatch = new CountDownLatch(dateList.size());
+            final Queue<Date> dateQueue = new ConcurrentLinkedQueue<>(dateList);
+            final BlockingQueue<Integer> tokens = prepareTokenQueue();
+            final CountDownLatch countDownLatch = new CountDownLatch(dateList.size());
 
-        while (!dateQueue.isEmpty()) {
-            final Date day = dateQueue.poll();
-            final Integer token = tokens.take();
-            transferExecutor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        transferByDay(day);
-                        String transferDay = new SimpleDateFormat("yyyy-MM-dd").format(day);
-                        File recordFile = getRecordFile();
-                        transferRecorder.writeRecord(transferDay, recordFile);
-
-                        logger.debug("transfer complete, day: " + transferDay);
-                    } catch (Exception e) {
-                        logger.error("Transfer data error, day = " + new SimpleDateFormat("yyyy-MM-dd").format(day), e);
-                    } finally {
+            while (!dateQueue.isEmpty()) {
+                final Date day = dateQueue.poll();
+                final Integer token = tokens.take();
+                transferExecutor.execute(new Runnable() {
+                    @Override
+                    public void run() {
                         try {
-                            tokens.put(token);
-                            countDownLatch.countDown();
-                        } catch (InterruptedException e) {
+                            transferByDay(day);
+                            String transferDay = new SimpleDateFormat("yyyy-MM-dd").format(day);
+                            File recordFile = getRecordFile();
+                            transferRecorder.writeRecord(transferDay, recordFile);
+
+                            logger.debug("transfer complete, day: " + transferDay);
+                        } catch (Exception e) {
+                            logger.error("Transfer data error, day = " + new SimpleDateFormat("yyyy-MM-dd").format(day), e);
+                        } finally {
+                            try {
+                                tokens.put(token);
+                                countDownLatch.countDown();
+                            } catch (InterruptedException e) {
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+
+            countDownLatch.await();
         }
 
-        countDownLatch.await();
+        if (StringUtils.isEmpty(endLine)) {
+            transferByDay(null);
+
+            logger.debug("all no time data transfer complete.");
+        }
+
     }
 
     protected abstract File getRecordFile() throws IOException;

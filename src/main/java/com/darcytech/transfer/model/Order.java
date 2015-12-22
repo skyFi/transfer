@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 import com.darcytech.transfer.enumeration.RefundStatus;
+import com.darcytech.transfer.enumeration.TradeStatus;
 
 /**
  * @author Eric
@@ -65,6 +66,19 @@ public class Order {
     private Long num;
 
     private Set<String> orderFrom;
+
+    /**
+     * trade的status
+     */
+    private TradeStatus status;
+
+    public TradeStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TradeStatus status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;

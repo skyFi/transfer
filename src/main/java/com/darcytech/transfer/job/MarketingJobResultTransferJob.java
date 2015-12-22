@@ -10,36 +10,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.darcytech.transfer.transfer.TradeTransferrer;
+import com.darcytech.transfer.transfer.MarketingJobResultTransferrer;
 
 /**
- * Created by darcy on 2015/12/3.
+ * Created by darcy on 2015/12/19.
  */
 @Component
-public class TradeTransferJob extends AbstractTransferJob{
+public class MarketingJobResultTransferJob extends AbstractTransferJob{
 
-    @Value("${transfer.trade.worker.count}")
-    private int transferTradeWorkerCount;
+    @Value("${transfer.marketingjob.result.worker.count}")
+    private int transferMarketingJobResultWorkerCount;
 
     @Autowired
-    private TradeTransferrer tradeTransferrer;
+    private MarketingJobResultTransferrer marketingJobResultTransferrer;
 
     @Override
     protected File getRecordFile() throws IOException {
-        return new File("transferred-trade.rcd");
+        return new File("marketingjob-result.rcd");
     }
 
     @Override
     protected void transferByDay(Date day) throws Exception {
         if (day != null) {
-            tradeTransferrer.transferByDay(day);
+            marketingJobResultTransferrer.transferByDay(day);
+        } else {
+            marketingJobResultTransferrer.transfer();
         }
     }
 
     @Override
     protected BlockingQueue<Integer> prepareTokenQueue() {
-        BlockingQueue<Integer> tokens = new ArrayBlockingQueue<>(transferTradeWorkerCount);
-        for (int i = 0; i < transferTradeWorkerCount; i++) {
+        BlockingQueue<Integer> tokens = new ArrayBlockingQueue<>(transferMarketingJobResultWorkerCount);
+        for (int i = 0; i < transferMarketingJobResultWorkerCount; i++) {
             tokens.add(i);
         }
         return tokens;

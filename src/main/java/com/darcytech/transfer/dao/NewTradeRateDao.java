@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -13,6 +12,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,13 +39,15 @@ public class NewTradeRateDao {
     @Value("${es.test.addresses}")
     private String addresses;
 
+    private File userIndexRecorderFile = new File("user-index.json");
+
+    private JSONObject userIndexJson;
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @Autowired
     private TransferRecorder transferRecorder;
-
-    private List<String> fileList;
 
     public void bulkSave(List<TradeRate> tradeRates) throws Exception {
 
@@ -53,21 +55,27 @@ public class NewTradeRateDao {
             return;
         }
 
+        if (userIndexJson == null) {
+            userIndexJson = transferRecorder.readRecordAsJson(userIndexRecorderFile);
+        }
+
         StringBuilder stringBuilder = new StringBuilder();
 
         for (TradeRate tradeRate : tradeRates) {
-            String index = getTradeRateIndexByMouthAndUserId(String.valueOf(tradeRate.getUserId()), tradeRate.getCreatedTime());
-            if (index == null) {
-                throw new Exception("TradeRate didn't find alias: " + String.valueOf(tradeRate.getUserId()) + "_" + new SimpleDateFormat("yyyyMM").format(tradeRate.getCreatedTime()));
-            }
+
+            String userIndex = userIndexJson.get(tradeRate.getUserId().toString()).toString();
+
+            String tradeRateIndex = "traderate_" + new SimpleDateFormat("yyyyMM").format(tradeRate.getCreatedTime()) + userIndex.substring(userIndex.indexOf("_"));
             stringBuilder.append("{ \"index\" : { \"_index\" : \"")
-                    .append(index)
+                    .append(tradeRateIndex)
                     .append("\", ")
                     .append("\"_type\" : \"TradeRate\", ")
                     .append("\"_id\" : \"")
                     .append(StringEscapeUtils.escapeJava(tradeRate.getCustomerId()))
                     .append("\" } }")
                     .append("\n");
+
+            tradeRate.setCustomerId(null);
 
             stringBuilder.append(objectMapper.writeValueAsString(tradeRate))
                     .append("\n");
@@ -97,20 +105,6 @@ public class NewTradeRateDao {
             throw new IOException(String.valueOf(errorString));
         }
 
-    }
-
-    private String getTradeRateIndexByMouthAndUserId(String userId, Date createdTime) throws Exception {
-        if (fileList == null) {
-            File file = new File("trade-rate-aliases.rcd");
-            fileList = transferRecorder.readRecord(file);
-        }
-        String tradeRateAlias = null;
-        for (String alias : fileList) {
-            if (alias.contains(userId) && alias.contains(new SimpleDateFormat("yyyyMM").format(createdTime))) {
-                tradeRateAlias = alias;
-            }
-        }
-        return tradeRateAlias;
     }
 
     public String getIndexByUserId(String userId) throws IOException {

@@ -44,10 +44,6 @@
         "orderId": {
           "type": "long"
         },
-        "customerId": {
-          "index": "not_analyzed",
-          "type": "string"
-        },
         "createdTime": {
           "type": "date"
         },
@@ -68,6 +64,5 @@
         }
       }
     }
-  },
-  "aliases": {}
+  }
 }

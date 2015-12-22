@@ -24,7 +24,7 @@ public class CustomerDaoTest extends BaseTest {
     @Test
     public void testFindCustomerByIds() throws Exception {
         Set set = Sets.newHashSet(1L, 11L, 111L, 1111L);
-        Map<String, Object> ret = customerDao.findCustomerByIds(set);
+        Map<Long, String> ret = customerDao.findCustomerByIds(set);
         logger.info("ret={}", ret.toString());
     }
 }

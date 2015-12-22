@@ -10,39 +10,40 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.darcytech.transfer.transfer.CustomerTransferrer;
+import com.darcytech.transfer.transfer.ActionRecordTransferrer;
 
 /**
- * Created by darcy on 2015/12/2.
+ * Created by darcy on 2015/12/21.
  */
 @Component
-public class CustomerTransferJob extends AbstractTransferJob{
+public class ActionRecordTransferJob extends AbstractTransferJob{
+
+    @Value("${transfer.action.record.count}")
+    private int transferActionRecordCount;
 
     @Autowired
-    private CustomerTransferrer customerTransferrer;
-
-    @Value("${transfer.customer.worker.count}")
-    private int transferCustomerWorkerCount;
+    private ActionRecordTransferrer actionRecordTransferrer;
 
     @Override
     protected File getRecordFile() throws IOException {
-        return new File("transferred-customer.rcd");
+        return new File("action-record.rcd");
     }
 
     @Override
     protected void transferByDay(Date day) throws Exception {
         if (day != null) {
-            customerTransferrer.transferByDay(day);
+            actionRecordTransferrer.transferByDay(day);
+        } else {
+            actionRecordTransferrer.transfer();
         }
     }
 
     @Override
     protected BlockingQueue<Integer> prepareTokenQueue() {
-        BlockingQueue<Integer> tokens = new ArrayBlockingQueue<>(transferCustomerWorkerCount);
-        for (int i = 0; i < transferCustomerWorkerCount; i++) {
+        BlockingQueue<Integer> tokens = new ArrayBlockingQueue<>(transferActionRecordCount);
+        for (int i = 0; i < transferActionRecordCount; i++) {
             tokens.add(i);
         }
         return tokens;
     }
-
 }

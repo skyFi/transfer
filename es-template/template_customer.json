@@ -101,82 +101,104 @@
           "type": "nested",
           "properties": {
             "payTime": {
-              "type": "date"
+              "type": "date",
+              "doc_values": false
             },
             "buyerRate": {
-              "type": "boolean"
+              "type": "boolean",
+              "doc_values": false
             },
             "shippingType": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "receivedPayment": {
-              "type": "double"
+              "type": "double",
+              "doc_values": false
             },
             "title": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "type": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "receiverCity": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "itemNum": {
-              "type": "long"
+              "type": "long",
+              "doc_values": false
             },
             "consignTime": {
-              "type": "date"
+              "type": "date",
+              "doc_values": false
             },
             "sellerFlag": {
-              "type": "long"
+              "type": "long",
+              "doc_values": false
             },
             "paymentWithoutPostFee": {
-              "type": "double"
+              "type": "double",
+              "doc_values": false
             },
             "receiverDistrict": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "createdTime": {
-              "type": "date"
+              "type": "date",
+              "doc_values": false
             },
             "payment": {
-              "type": "double"
+              "type": "double",
+              "doc_values": false
             },
             "id": {
-              "index": "not_analyzed",
-              "type": "long"
+              "type": "long",
+              "doc_values": false
             },
             "sellerRate": {
-              "type": "boolean"
+              "type": "boolean",
+              "doc_values": false
             },
             "stepPaidFee": {
-              "type": "double"
+              "type": "double",
+              "doc_values": false
             },
             "receiveMobile": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "receiverName": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "postFee": {
-              "type": "double"
+              "type": "double",
+              "doc_values": false
             },
             "timeoutActionTime": {
-              "type": "date"
+              "type": "date",
+              "doc_values": false
             },
             "taobaoLastModifyTime": {
-              "type": "date"
+              "type": "date",
+              "doc_values": false
             },
             "stepTradeStatus": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "receiverAddress": {
               "index": "no",
@@ -189,27 +211,32 @@
             },
             "tradeFrom": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "shippingNo": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "lastModifyTime": {
-              "type": "date"
+              "type": "date",
+              "doc_values": false
             },
             "receiverState": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "shippingCompanyName": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             },
             "orders": {
               "dynamic": "strict",
               "include_in_all": false,
-              "type": "nested",
+              "type": "object",
               "properties": {
                 "itemTitle": {
                   "analyzer": "4gram_analyzer",
@@ -217,34 +244,42 @@
                   "type": "string"
                 },
                 "num": {
-                  "type": "long"
+                  "type": "long",
+                  "doc_values": false
                 },
                 "refundStatus": {
                   "index": "not_analyzed",
-                  "type": "string"
+                  "type": "string",
+                  "doc_values": false
                 },
                 "itemId": {
-                  "type": "long"
+                  "type": "long",
+                  "doc_values": false
                 },
                 "orderPayment": {
-                  "type": "double"
+                  "type": "double",
+                  "doc_values": false
                 },
                 "consignTime": {
-                  "type": "date"
+                  "type": "date",
+                  "doc_values": false
                 },
                 "price": {
-                  "type": "double"
+                  "type": "double",
+                  "doc_values": false
                 },
                 "orderFrom": {
                   "index": "not_analyzed",
-                  "type": "string"
+                  "type": "string",
+                  "doc_values": false
                 },
                 "payment": {
-                  "type": "double"
+                  "type": "double",
+                  "doc_values": false
                 },
                 "id": {
-                  "index": "not_analyzed",
-                  "type": "long"
+                  "type": "long",
+                  "doc_values": false
                 },
                 "itemImgUrl": {
                   "index": "no",
@@ -252,12 +287,19 @@
                 },
                 "skuId": {
                   "index": "not_analyzed",
-                  "type": "string"
+                  "type": "string",
+                  "doc_values": false
+                },
+                "status": {
+                  "index": "not_analyzed",
+                  "type": "string",
+                  "doc_values": false
                 }
               }
             },
             "endTime": {
-              "type": "date"
+              "type": "date",
+              "doc_values": false
             },
             "sellerMemo": {
               "analyzer": "4gram_analyzer",
@@ -266,7 +308,8 @@
             },
             "status": {
               "index": "not_analyzed",
-              "type": "string"
+              "type": "string",
+              "doc_values": false
             }
           }
         },
@@ -319,6 +362,5 @@
         }
       }
     }
-  },
-  "aliases": {}
+  }
 }

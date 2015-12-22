@@ -31,7 +31,9 @@ public class TradeRateTransferJob extends AbstractTransferJob{
 
     @Override
     protected void transferByDay(Date day) throws Exception {
-        tradeRateTransferrer.transferByDay(day);
+        if (day != null) {
+            tradeRateTransferrer.transferByDay(day);
+        }
     }
 
     @Override

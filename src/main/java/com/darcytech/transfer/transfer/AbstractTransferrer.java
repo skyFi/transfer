@@ -28,6 +28,11 @@ public abstract class AbstractTransferrer {
         }
     }
 
+    public void transfer() throws Exception {
+        EsScroller esScroll = getScroller(null, null);
+        scrollAndTransfer(esScroll, "First transfer. ");
+    }
+
     private void scrollAndTransfer(EsScroller esScroll, String day) throws Exception {
 
         int count = 0;
