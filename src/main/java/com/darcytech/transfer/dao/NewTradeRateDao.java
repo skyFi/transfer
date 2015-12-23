@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -22,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.darcytech.transfer.model.CustomerIndexMapping;
+import com.darcytech.transfer.model.ElasticIndexMapping;
 import com.darcytech.transfer.model.TradeRate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +43,7 @@ public class NewTradeRateDao {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private List<CustomerIndexMapping> customerIndices;
+    private List<ElasticIndexMapping> customerIndices;
 
     @Autowired
     private EntityManager entityManager;
@@ -65,7 +63,7 @@ public class NewTradeRateDao {
 
             String userIndex = null;
             String tradeRateIndex = null;
-            for (CustomerIndexMapping customerIndex : customerIndices) {
+            for (ElasticIndexMapping customerIndex : customerIndices) {
                 if (customerIndex.getId().equals(tradeRate.getUserId())) {
                     userIndex = customerIndex.getCustomerIndex();
                 }
@@ -117,7 +115,7 @@ public class NewTradeRateDao {
 
     }
 
-    private List<CustomerIndexMapping> getIndices() {
+    private List<ElasticIndexMapping> getIndices() {
             StringBuilder hql = new StringBuilder();
             hql.append(" from CustomerIndexMapping");
             Query q = entityManager.createQuery(hql.toString());

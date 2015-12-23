@@ -7,19 +7,18 @@ import javax.persistence.Id;
  * Created by darcy on 2015/12/22.
  */
 @Entity
-public class CustomerIndexMapping {
+public class ElasticIndexMapping extends BaseModel{
 
-    @Id
-    private Long id;
+    private Long userId;
 
     private String customerIndex;
 
-    public Long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getCustomerIndex() {

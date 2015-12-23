@@ -15,7 +15,7 @@ import com.darcytech.transfer.dao.AliasDao;
 import com.darcytech.transfer.dao.ProdCustomerDao;
 import com.darcytech.transfer.dao.TransferEntityDao;
 import com.darcytech.transfer.enumeration.AliasType;
-import com.darcytech.transfer.model.CustomerIndexMapping;
+import com.darcytech.transfer.model.ElasticIndexMapping;
 import com.darcytech.transfer.util.MapSortUtil;
 
 /**
@@ -64,10 +64,10 @@ public class AliasCreateJob {
                 aliasDao.createNewAliases(smallestIndex, entry.getKey(), AliasType.CUSTOMER);
 
                 //保存用户的id与index的映射表
-                CustomerIndexMapping customerIndexMapping = new CustomerIndexMapping();
-                customerIndexMapping.setId(Long.valueOf(entry.getKey()));
-                customerIndexMapping.setCustomerIndex(smallestIndex);
-                transferEntityDao.save(customerIndexMapping);
+                ElasticIndexMapping elasticIndexMapping = new ElasticIndexMapping();
+                elasticIndexMapping.setId(Long.valueOf(entry.getKey()));
+                elasticIndexMapping.setCustomerIndex(smallestIndex);
+                transferEntityDao.save(elasticIndexMapping);
 
                 newIndexDocCounts.put(smallestIndex, newIndexDocCounts.get(smallestIndex) + entry.getValue());
                 logger.debug("user#" + entry.getKey() + ",aliasIndex: " + smallestIndex + " -> " + count + "/" + userDocCounts.size());

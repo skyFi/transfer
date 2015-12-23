@@ -73,20 +73,20 @@ public class TransferMain {
             aliasCreateJob.createAliases();
             logger.info("creating aliases complete.");
 
-//            logger.info("start transferring customers......");
-//            CustomerTransferJob customerTransferJob = context.getBean(CustomerTransferJob.class);
-//            customerTransferJob.doTransfer();
-//            logger.info("transferring customer complete.");
-//
-//            logger.info("start transferring trades and orders......");
-//            TradeTransferJob tradeTransferJob = context.getBean(TradeTransferJob.class);
-//            tradeTransferJob.doTransfer();
-//            logger.info("transferring trades and orders complete.");
+            logger.info("start transferring customers......");
+            CustomerTransferJob customerTransferJob = context.getBean(CustomerTransferJob.class);
+            customerTransferJob.doTransfer();
+            logger.info("transferring customer complete.");
 
-//            logger.info("start transferring traderate......");
-//            TradeRateTransferJob tradeRateTransferJob = context.getBean(TradeRateTransferJob.class);
-//            tradeRateTransferJob.doTransfer();
-//            logger.info("transferring traderate complete.");
+            logger.info("start transferring trades and orders......");
+            TradeTransferJob tradeTransferJob = context.getBean(TradeTransferJob.class);
+            tradeTransferJob.doTransfer();
+            logger.info("transferring trades and orders complete.");
+
+            logger.info("start transferring traderate......");
+            TradeRateTransferJob tradeRateTransferJob = context.getBean(TradeRateTransferJob.class);
+            tradeRateTransferJob.doTransfer();
+            logger.info("transferring traderate complete.");
 
             logger.info("transferring es to es complete.");
 
@@ -96,10 +96,10 @@ public class TransferMain {
             marketingJobResultJob.doTransfer();
             logger.info("transferring marketing job result complete.");
 
-            logger.info("start transferring marketing job result......");
+            logger.info("start transferring marketing job result order......");
             MarketingJobResultOrderTransferJob marketingJobResultOrderJob = context.getBean(MarketingJobResultOrderTransferJob.class);
             marketingJobResultOrderJob.doTransfer();
-            logger.info("transferring marketing job result complete.");
+            logger.info("transferring marketing job result order complete.");
 
             logger.info("start transferring action record......");
             ActionRecordTransferJob actionRecordTransferJob = context.getBean(ActionRecordTransferJob.class);
