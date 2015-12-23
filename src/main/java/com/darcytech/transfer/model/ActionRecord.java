@@ -3,10 +3,14 @@ package com.darcytech.transfer.model;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Lob;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
+
+import com.darcytech.transfer.enumeration.ActionType;
 
 /**
  * Created by darcy on 2015/12/21.
@@ -31,7 +35,8 @@ public class ActionRecord extends BaseModel {
 
     private String buyerNick;
 
-    private String actionType;
+    @Enumerated(EnumType.STRING)
+    private ActionType actionType;
 
     private Date actionTime;
 
@@ -40,7 +45,7 @@ public class ActionRecord extends BaseModel {
     @Lob
     private String actionContent;
 
-    private boolean isSuccess;
+    private Boolean isSuccess;
 
     private String failReason;
 
@@ -108,11 +113,11 @@ public class ActionRecord extends BaseModel {
         this.buyerNick = buyerNick;
     }
 
-    public String getActionType() {
+    public ActionType getActionType() {
         return actionType;
     }
 
-    public void setActionType(String actionType) {
+    public void setActionType(ActionType actionType) {
         this.actionType = actionType;
     }
 
@@ -140,11 +145,11 @@ public class ActionRecord extends BaseModel {
         this.actionContent = actionContent;
     }
 
-    public boolean isSuccess() {
+    public Boolean isSuccess() {
         return isSuccess;
     }
 
-    public void setSuccess(boolean isSuccess) {
+    public void setSuccess(Boolean isSuccess) {
         this.isSuccess = isSuccess;
     }
 
