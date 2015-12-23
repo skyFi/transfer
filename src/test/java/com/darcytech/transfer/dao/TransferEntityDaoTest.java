@@ -20,7 +20,7 @@ public class TransferEntityDaoTest extends BaseTest {
         List<MarketingJobResult> marketingJobResults = new ArrayList<>();
         marketingJobResults.add(marketingJobResult);
 
-        transferEntityDao.save(marketingJobResults);
+        transferEntityDao.multiSave(marketingJobResults);
 
     }
 }

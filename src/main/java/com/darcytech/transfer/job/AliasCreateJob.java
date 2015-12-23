@@ -1,16 +1,10 @@
 package com.darcytech.transfer.job;
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import org.elasticsearch.search.lookup.FieldLookup;
-import org.joda.time.DateTime;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +13,10 @@ import org.springframework.stereotype.Component;
 
 import com.darcytech.transfer.dao.AliasDao;
 import com.darcytech.transfer.dao.ProdCustomerDao;
+import com.darcytech.transfer.dao.TransferEntityDao;
 import com.darcytech.transfer.enumeration.AliasType;
-import com.darcytech.transfer.recorder.TransferRecorder;
+import com.darcytech.transfer.model.CustomerIndexMapping;
 import com.darcytech.transfer.util.MapSortUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * Created by darcy on 2015/12/2.
@@ -40,9 +33,7 @@ public class AliasCreateJob {
     private AliasDao aliasDao;
 
     @Autowired
-    private TransferRecorder transferRecorder;
-
-    private File userIndexRecorderFile = new File("user-index.json");
+    private TransferEntityDao transferEntityDao;
 
     @Value("${tradeRate.index.line.start}")
     private String tradeRateIndexStartLine;
@@ -65,7 +56,6 @@ public class AliasCreateJob {
             }
         });
 
-        JSONObject userIndex = transferRecorder.readRecordAsJson(userIndexRecorderFile);
         for (Map.Entry<String, Long> entry : sortedDocCounts.entrySet()) {
             count = count + 1;
             if (!newAliases.contains(entry.getKey())) {
@@ -73,7 +63,11 @@ public class AliasCreateJob {
                 //创建Customer的aliases
                 aliasDao.createNewAliases(smallestIndex, entry.getKey(), AliasType.CUSTOMER);
 
-                userIndex.put(entry.getKey(), smallestIndex);
+                //保存用户的id与index的映射表
+                CustomerIndexMapping customerIndexMapping = new CustomerIndexMapping();
+                customerIndexMapping.setId(Long.valueOf(entry.getKey()));
+                customerIndexMapping.setCustomerIndex(smallestIndex);
+                transferEntityDao.save(customerIndexMapping);
 
                 newIndexDocCounts.put(smallestIndex, newIndexDocCounts.get(smallestIndex) + entry.getValue());
                 logger.debug("user#" + entry.getKey() + ",aliasIndex: " + smallestIndex + " -> " + count + "/" + userDocCounts.size());
@@ -81,11 +75,6 @@ public class AliasCreateJob {
                     logger.debug("index doc counts: " + String.valueOf(newIndexDocCounts));
                 }
             }
-        }
-
-        //记录用户所在的index，保存TradeRate查询用。
-        if (userIndex.length() != 0) {
-            transferRecorder.writeRecordAsJson(String.valueOf(userIndex), userIndexRecorderFile);
         }
     }
 

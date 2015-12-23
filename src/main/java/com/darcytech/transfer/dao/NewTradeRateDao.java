@@ -1,10 +1,14 @@
 package com.darcytech.transfer.dao;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpResponse;
@@ -12,15 +16,14 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.darcytech.transfer.model.CustomerIndexMapping;
 import com.darcytech.transfer.model.TradeRate;
-import com.darcytech.transfer.recorder.TransferRecorder;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -39,33 +42,40 @@ public class NewTradeRateDao {
     @Value("${es.test.addresses}")
     private String addresses;
 
-    private File userIndexRecorderFile = new File("user-index.json");
-
-    private JSONObject userIndexJson;
-
     @Autowired
     private ObjectMapper objectMapper;
 
+    private List<CustomerIndexMapping> customerIndices;
+
     @Autowired
-    private TransferRecorder transferRecorder;
+    private EntityManager entityManager;
 
     public void bulkSave(List<TradeRate> tradeRates) throws Exception {
 
         if (tradeRates.isEmpty()) {
             return;
         }
-
-        if (userIndexJson == null) {
-            userIndexJson = transferRecorder.readRecordAsJson(userIndexRecorderFile);
+        if (customerIndices == null) {
+            customerIndices = getIndices();
         }
 
         StringBuilder stringBuilder = new StringBuilder();
 
         for (TradeRate tradeRate : tradeRates) {
 
-            String userIndex = userIndexJson.get(tradeRate.getUserId().toString()).toString();
+            String userIndex = null;
+            String tradeRateIndex = null;
+            for (CustomerIndexMapping customerIndex : customerIndices) {
+                if (customerIndex.getId().equals(tradeRate.getUserId())) {
+                    userIndex = customerIndex.getCustomerIndex();
+                }
+            }
 
-            String tradeRateIndex = "traderate_" + new SimpleDateFormat("yyyyMM").format(tradeRate.getCreatedTime()) + userIndex.substring(userIndex.indexOf("_"));
+            if (userIndex != null) {
+                tradeRateIndex = "traderate_" + new SimpleDateFormat("yyyyMM").format(tradeRate.getCreatedTime()) + userIndex.substring(userIndex.indexOf("_"));
+            } else {
+                throw new Exception("can`t find this customer(" + tradeRate.getUserId() + ") index for traderate.");
+            }
             stringBuilder.append("{ \"index\" : { \"_index\" : \"")
                     .append(tradeRateIndex)
                     .append("\", ")
@@ -105,6 +115,13 @@ public class NewTradeRateDao {
             throw new IOException(String.valueOf(errorString));
         }
 
+    }
+
+    private List<CustomerIndexMapping> getIndices() {
+            StringBuilder hql = new StringBuilder();
+            hql.append(" from CustomerIndexMapping");
+            Query q = entityManager.createQuery(hql.toString());
+            return q.getResultList();
     }
 
     public String getIndexByUserId(String userId) throws IOException {

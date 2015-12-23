@@ -73,20 +73,20 @@ public class TransferMain {
             aliasCreateJob.createAliases();
             logger.info("creating aliases complete.");
 
-            logger.info("start transferring customers......");
-            CustomerTransferJob customerTransferJob = context.getBean(CustomerTransferJob.class);
-            customerTransferJob.doTransfer();
-            logger.info("transferring customer complete.");
+//            logger.info("start transferring customers......");
+//            CustomerTransferJob customerTransferJob = context.getBean(CustomerTransferJob.class);
+//            customerTransferJob.doTransfer();
+//            logger.info("transferring customer complete.");
+//
+//            logger.info("start transferring trades and orders......");
+//            TradeTransferJob tradeTransferJob = context.getBean(TradeTransferJob.class);
+//            tradeTransferJob.doTransfer();
+//            logger.info("transferring trades and orders complete.");
 
-            logger.info("start transferring trades and orders......");
-            TradeTransferJob tradeTransferJob = context.getBean(TradeTransferJob.class);
-            tradeTransferJob.doTransfer();
-            logger.info("transferring trades and orders complete.");
-
-            logger.info("start transferring traderate......");
-            TradeRateTransferJob tradeRateTransferJob = context.getBean(TradeRateTransferJob.class);
-            tradeRateTransferJob.doTransfer();
-            logger.info("transferring traderate complete.");
+//            logger.info("start transferring traderate......");
+//            TradeRateTransferJob tradeRateTransferJob = context.getBean(TradeRateTransferJob.class);
+//            tradeRateTransferJob.doTransfer();
+//            logger.info("transferring traderate complete.");
 
             logger.info("transferring es to es complete.");
 

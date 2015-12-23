@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +21,14 @@ public class TransferEntityDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public <T> void save(List<T> ts) {
+    public <T> void multiSave(List<T> ts) {
         for (T t : ts) {
             entityManager.merge(t);
         }
     }
+
+    public <T> void save(T t) {
+        entityManager.merge(t);
+    }
+
 }

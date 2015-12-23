@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import com.darcytech.transfer.dao.EsScroller;
@@ -45,7 +44,7 @@ public class RefundTransferrer extends AbstractTransferrer {
             refunds.add(refund);
 
         }
-        transferEntityDao.save(refunds);
+        transferEntityDao.multiSave(refunds);
     }
 
     @Override

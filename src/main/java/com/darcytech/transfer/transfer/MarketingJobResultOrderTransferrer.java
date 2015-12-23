@@ -40,7 +40,7 @@ public class MarketingJobResultOrderTransferrer extends AbstractTransferrer {
             marketingJobResultOrders.add(marketingJobResultOrder);
 
         }
-        transferEntityDao.save(marketingJobResultOrders);
+        transferEntityDao.multiSave(marketingJobResultOrders);
     }
 
     @Override
