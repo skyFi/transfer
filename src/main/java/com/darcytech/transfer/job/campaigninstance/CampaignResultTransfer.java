@@ -171,7 +171,11 @@ public class CampaignResultTransfer implements CampaignInstanceNewTransfer {
             stepInstance.setCreateDate(step.getCreated());
             stepInstance.setStepIndex(step.getStepIndex());
             stepInstance.setStepName(step.getStepName());
-            stepInstance.setTotalTrades(step.getTotalTrades());
+            Set<Long> tids = Sets.newHashSet();
+            for (String id : step.getTotalTrades()) {
+                tids.add(Long.valueOf(id));
+            }
+            stepInstance.setTotalTrades(tids);
             stepInstance.setTriggerTradeId(step.getTriggerTradeId());
             instanceNew.getStepInstances().add(stepInstance);
         }
