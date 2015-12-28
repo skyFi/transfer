@@ -38,7 +38,7 @@ public class CampaignStepInstance {
     /**
      * 总订单id
      */
-    private Set<Long> totalTrades = new HashSet<>();
+    private Set<String> totalTrades = new HashSet<>();
 
     /**
      * 总动作id
@@ -85,11 +85,11 @@ public class CampaignStepInstance {
         this.contacted = contacted;
     }
 
-    public Set<Long> getTotalTrades() {
+    public Set<String> getTotalTrades() {
         return totalTrades;
     }
 
-    public void setTotalTrades(Set<Long> totalTrades) {
+    public void setTotalTrades(Set<String> totalTrades) {
         this.totalTrades = totalTrades;
     }
 

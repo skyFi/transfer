@@ -7,6 +7,6 @@ public enum RecordTableName {
 
     customer_record,
 
-    action_record_record
+    action_record_record,
 
 }
