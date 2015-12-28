@@ -1,4 +1,4 @@
-package com.darcytech.transfer.job.campaigninstance;
+package com.darcytech.transfer.job.campaign;
 
 import java.util.Date;
 

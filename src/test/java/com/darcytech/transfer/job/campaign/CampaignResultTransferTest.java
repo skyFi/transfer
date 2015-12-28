@@ -1,8 +1,7 @@
-package com.darcytech.transfer.job.campaigninstance;
+package com.darcytech.transfer.job.campaign;
 
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -11,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 
 import com.darcytech.transfer.BaseTest;
 
@@ -38,11 +38,6 @@ public class CampaignResultTransferTest extends BaseTest {
         Date endTime = StringUtils.isEmpty(endLine) ? null : DateTime.parse(endLine, formatter).toDate();
 
         resultTransfer.transferAndSave(startTime, endTime);
-        logger.info("success");
-    }
-
-    @Test
-    public void test() throws Exception{
-
+        logger.info("success ");
     }
 }

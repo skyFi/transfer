@@ -36,10 +36,9 @@ public class CampaignInstanceDao {
     private JdbcTemplate jdbcTemplate;
 
     @Transactional
-    public List<CampaignInstance> findCampaignInstanceByResultIdIsNull(Date startTime,
-                                                                       Date endTime, int pageNo, int pageSize) {
+    public List<CampaignInstance> findCampaignInstanceByDate(Date startTime,
+                                                             Date endTime, int pageNo, int pageSize) {
         DetachedCriteria detachedCriteria = DetachedCriteria.forClass(CampaignInstance.class);
-        detachedCriteria.add(Restrictions.isNull("resultId"));
         if (startTime != null) {
             detachedCriteria.add(Restrictions.ge("createDate", startTime));
         }
@@ -55,8 +54,8 @@ public class CampaignInstanceDao {
         return criteria.list();
     }
 
-    public int countCampaignInstanceByResultIdIsNull(Date startTime, Date endTime) {
-        StringBuffer sql = new StringBuffer("select count(id) from campaign_instance where result_id is null");
+    public int countCampaignInstanceByDate(Date startTime, Date endTime) {
+        StringBuffer sql = new StringBuffer("select count(id) from campaign_instance where 1 = 1");
 
         List param = Lists.newArrayList();
         if (startTime != null) {

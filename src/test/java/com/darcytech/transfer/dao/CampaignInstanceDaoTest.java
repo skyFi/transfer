@@ -32,22 +32,22 @@ public class CampaignInstanceDaoTest extends BaseTest {
 
     @Test
     public void testFindCampaignInstanceByResultIdIsNull() throws Exception {
-        List<CampaignInstance> instanceList = instanceDao.
-                findCampaignInstanceByResultIdIsNull(null,operateEndTimeLine, 1, 10);
-        logger.info("end time :{} success size:{}", operateEndTimeLine, instanceList.size());
-        for (CampaignInstance instance : instanceList) {
-            logger.info("instance id :{}", instance.getId());
-        }
+//        List<CampaignInstance> instanceList = instanceDao.
+//                findCampaignInstanceByResultIdIsNull(null,operateEndTimeLine, 1, 10);
+//        logger.info("end time :{} success size:{}", operateEndTimeLine, instanceList.size());
+//        for (CampaignInstance instance : instanceList) {
+//            logger.info("instance id :{}", instance.getId());
+//        }
     }
 
     @Test
     public void testCountCampaignInstanceByResultIdIsNull() throws Exception {
-        int count = instanceDao.countCampaignInstanceByResultIdIsNull(null,operateEndTimeLine);
-        logger.info("campaign instance total size :{}", count);
-        int pageSize = 100;
-
-        int totalPage = count % pageSize == 0 ? count / pageSize : (count / pageSize) + 1;
-
-        logger.info("campaign instance total size :{},total page :{}", count, totalPage);
+//        int count = instanceDao.countCampaignInstanceByResultIdIsNull(null,operateEndTimeLine);
+//        logger.info("campaign instance total size :{}", count);
+//        int pageSize = 100;
+//
+//        int totalPage = count % pageSize == 0 ? count / pageSize : (count / pageSize) + 1;
+//
+//        logger.info("campaign instance total size :{},total page :{}", count, totalPage);
     }
 }

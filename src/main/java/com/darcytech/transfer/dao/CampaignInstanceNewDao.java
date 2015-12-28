@@ -26,14 +26,26 @@ public class CampaignInstanceNewDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void multiSave(List<CampaignInstanceNew> newList) {
+    public void multiSaveOrUpdate(List<CampaignInstanceNew> newList) {
         for (CampaignInstanceNew instanceNew : newList) {
-            save(instanceNew);
+            saveOrUpdate(instanceNew);
         }
     }
 
     public void save(CampaignInstanceNew instanceNew) {
         entityManager.persist(instanceNew);
+    }
+
+    public CampaignInstanceNew findByOldInstanceId(Long oldInstanceId) {
+        DetachedCriteria detachedCriteria = DetachedCriteria.forClass(CampaignInstanceNew.class);
+        detachedCriteria.add(Restrictions.eq("oldInstanceId", oldInstanceId));
+
+        Session session = entityManager.unwrap(Session.class);
+
+        Criteria criteria = detachedCriteria.getExecutableCriteria(session);
+        List<CampaignInstanceNew> list = criteria.list();
+
+        return list != null && list.size() > 0 ? list.get(0) : null;
     }
 
     public CampaignInstanceNew findByConditions(Long userId, Long campaignId, String buyerNick) {
