@@ -2,6 +2,7 @@ package com.darcytech.transfer.dao;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -14,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.darcytech.transfer.enumeration.FailedDataType;
+import com.darcytech.transfer.enumeration.FailedReason;
+import com.darcytech.transfer.model.FailedData;
 import com.darcytech.transfer.model.Order;
 import com.darcytech.transfer.model.Trade;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +27,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @Component
 public class ProdOrderDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProdOrderDao.class);
 
     @Autowired
     private ObjectMapper objectMapper;

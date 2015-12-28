@@ -15,6 +15,10 @@ import com.darcytech.transfer.dao.EsScroller;
 import com.darcytech.transfer.dao.NewTradeRateDao;
 import com.darcytech.transfer.dao.ProdCustomerDao;
 import com.darcytech.transfer.dao.ProdTradeRateDao;
+import com.darcytech.transfer.dao.TransferEntityDao;
+import com.darcytech.transfer.enumeration.FailedDataType;
+import com.darcytech.transfer.enumeration.FailedReason;
+import com.darcytech.transfer.model.FailedData;
 import com.darcytech.transfer.model.TradeRate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -36,6 +40,9 @@ public class TradeRateTransferrer extends AbstractTransferrer{
     @Autowired
     private ProdCustomerDao prodCustomerDao;
 
+    @Autowired
+    private TransferEntityDao transferEntityDao;
+
     @Override
     protected void bulkTransfer(SearchHits searchHits) throws Exception {
         List<TradeRate> tradeRates = new ArrayList<>();
@@ -45,6 +52,17 @@ public class TradeRateTransferrer extends AbstractTransferrer{
             if (existsUsers.contains(String.valueOf(tradeRate.getUserId()))) {
                 tradeRate.setCustomerId(tradeRate.getUserId() + "_" + tradeRate.getNick());
                 tradeRates.add(tradeRate);
+            } else {
+                FailedData failedData = new FailedData();
+
+                failedData.setProdId(tradeRate.getId());
+                failedData.setUserId(tradeRate.getUserId());
+                failedData.setBuyerNick(tradeRate.getNick());
+                failedData.setType(FailedDataType.TRADERATE);
+                failedData.setReason(FailedReason.EXPIRED);
+                failedData.setTransferTime(tradeRate.getCreatedTime());
+
+                transferEntityDao.persist(failedData);
             }
         }
         newTradeRateDao.bulkSave(tradeRates);

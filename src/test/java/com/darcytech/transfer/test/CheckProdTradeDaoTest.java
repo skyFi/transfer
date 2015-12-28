@@ -26,7 +26,7 @@ import junit.framework.Assert;
 @Configuration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(TransferMain.class)
-public class ProdTradeDaoTest {
+public class CheckProdTradeDaoTest {
 
     @Autowired
     private ProdTradeDao prodTradeDao;

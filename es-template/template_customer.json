@@ -3,7 +3,6 @@
   "template": "customer_*",
   "settings": {
     "index": {
-      "refresh_interval": "1m",
       "analysis": {
         "analyzer": {
           "4gram_analyzer": {
@@ -214,21 +213,11 @@
               "type": "string",
               "doc_values": false
             },
-            "shippingNo": {
-              "index": "not_analyzed",
-              "type": "string",
-              "doc_values": false
-            },
             "lastModifyTime": {
               "type": "date",
               "doc_values": false
             },
             "receiverState": {
-              "index": "not_analyzed",
-              "type": "string",
-              "doc_values": false
-            },
-            "shippingCompanyName": {
               "index": "not_analyzed",
               "type": "string",
               "doc_values": false
@@ -291,6 +280,16 @@
                   "doc_values": false
                 },
                 "status": {
+                  "index": "not_analyzed",
+                  "type": "string",
+                  "doc_values": false
+                },
+                "shippingNo": {
+                  "index": "not_analyzed",
+                  "type": "string",
+                  "doc_values": false
+                },
+                "shippingCompanyName": {
                   "index": "not_analyzed",
                   "type": "string",
                   "doc_values": false

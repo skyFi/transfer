@@ -28,7 +28,7 @@ public class BulkSaveTest {
     private NewCustomerDao newCustomerDao;
 
     @Test
-    public void testBulkSave() throws IOException {
+    public void testBulkSave() throws Exception {
         List<CustomerDetail> customerDetails = new ArrayList<>();
 
         CustomerDetail customerDetail1 = new CustomerDetail();

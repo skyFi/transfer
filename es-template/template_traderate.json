@@ -3,7 +3,6 @@
   "template": "traderate_*",
   "settings": {
     "index": {
-      "refresh_interval": "1m",
       "analysis": {
         "analyzer": {
           "4gram_analyzer": {

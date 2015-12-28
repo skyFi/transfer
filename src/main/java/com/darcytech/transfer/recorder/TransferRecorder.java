@@ -32,10 +32,6 @@ public class TransferRecorder {
         }
     }
 
-    public synchronized void writeRecordAsJson(String record, File recordFile) throws Exception {
-        IOUtils.write(record, new FileOutputStream(recordFile, false));
-    }
-
     public JSONObject readRecordAsJson(File recordFile) throws Exception {
         if (recordFile.exists()) {
             String fileName = recordFile.getName();

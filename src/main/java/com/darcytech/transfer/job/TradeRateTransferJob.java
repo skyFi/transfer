@@ -1,8 +1,7 @@
 package com.darcytech.transfer.job;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -25,8 +24,8 @@ public class TradeRateTransferJob extends AbstractTransferJob{
     private TradeRateTransferrer tradeRateTransferrer;
 
     @Override
-    protected File getRecordFile() throws IOException {
-        return new File("transferred-trade-rate.rcd");
+    protected void saveTransferRecord(String transferDay) throws Exception {
+
     }
 
     @Override
@@ -43,5 +42,10 @@ public class TradeRateTransferJob extends AbstractTransferJob{
             tokens.add(i);
         }
         return tokens;
+    }
+
+    @Override
+    protected List<String> getTransferDays() {
+        return null;
     }
 }

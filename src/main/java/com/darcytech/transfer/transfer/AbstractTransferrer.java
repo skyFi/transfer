@@ -43,7 +43,8 @@ public abstract class AbstractTransferrer {
                 break;
             }
             bulkTransfer(searchHits);
-            logger.debug("Day: " + day + " progress: " + count + "/" + searchHits.getTotalHits());
+            logger.debug("Day: {}, progress: {}/{}, each hit count: {}",
+                    day, count, searchHits.getTotalHits(), searchHits.getHits().length);
         }
     }
 

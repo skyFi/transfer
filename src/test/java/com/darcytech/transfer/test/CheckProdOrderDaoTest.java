@@ -26,7 +26,7 @@ import com.darcytech.transfer.model.Trade;
 @Configuration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(TransferMain.class)
-public class ProdOrderDaoTest {
+public class CheckProdOrderDaoTest {
 
     @Autowired
     private ProdOrderDao prodOrderDao;

@@ -21,9 +21,4 @@ public class TransferRecorderTest extends BaseTest {
         Assert.assertNotNull(file);
     }
 
-    @Test
-    public void testReadRecordAsJson() throws Exception {
-        JSONObject jsonObject = transferRecorder.readRecordAsJson(new File("user-index.json"));
-        Assert.assertNotNull(jsonObject);
-    }
 }

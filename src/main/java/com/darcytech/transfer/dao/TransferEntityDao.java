@@ -4,11 +4,8 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -27,8 +24,12 @@ public class TransferEntityDao {
         }
     }
 
-    public <T> void save(T t) {
+    public <T> void merge(T t) {
         entityManager.merge(t);
+    }
+
+    public <T> void persist(T t) {
+        entityManager.persist(t);
     }
 
 }

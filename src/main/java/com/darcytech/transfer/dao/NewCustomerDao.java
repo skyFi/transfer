@@ -16,7 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.darcytech.transfer.enumeration.FailedDataType;
+import com.darcytech.transfer.enumeration.FailedReason;
 import com.darcytech.transfer.model.CustomerDetail;
+import com.darcytech.transfer.model.ElasticIndexMapping;
+import com.darcytech.transfer.model.FailedData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -35,19 +39,54 @@ public class NewCustomerDao {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ElasticIndexMappingDao elasticIndexMappingDao;
+
+    @Autowired
+    private TransferEntityDao transferEntityDao;
+
     @Value("${es.test.addresses}")
     private String addresses;
 
-    public void bulkSave(List<CustomerDetail> customerDetails) throws IOException {
+    private List<ElasticIndexMapping> indexMappings;
+
+    public void bulkSave(List<CustomerDetail> customerDetails) throws Exception {
 
         if (customerDetails.isEmpty()) {
             return;
         }
+
+        if (indexMappings == null) {
+            indexMappings = elasticIndexMappingDao.getIndexMappingList();
+        }
         StringBuilder stringBuilder = new StringBuilder();
 
         for (CustomerDetail customerDetail : customerDetails) {
+
+            String userIndex = null;
+            for (ElasticIndexMapping customerIndex : indexMappings) {
+                if (customerIndex.getUserId().equals(customerDetail.getUserId())) {
+                    userIndex = customerIndex.getCustomerIndex();
+                }
+            }
+
+            if (userIndex == null) {
+
+                FailedData failedData = new FailedData();
+
+                failedData.setProdId(customerDetail.getId());
+                failedData.setUserId(customerDetail.getUserId());
+                failedData.setBuyerNick(customerDetail.getNick());
+                failedData.setType(FailedDataType.CUSTOMER);
+                failedData.setReason(FailedReason.CANT_FIND_USERID);
+                failedData.setTransferTime(customerDetail.getLastModifyTime());
+
+                transferEntityDao.persist(failedData);
+                throw new Exception("can`t find user index.");
+            }
+
             stringBuilder.append("{ \"update\" : { \"_index\" : \"")
-                    .append(customerDetail.getUserId())
+                    .append(userIndex)
                     .append("\", ")
                     .append("\"_type\" : \"CustomerDetail\", ")
                     .append("\"_id\" : \"")

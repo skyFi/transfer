@@ -5,9 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -20,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.darcytech.transfer.enumeration.FailedDataType;
+import com.darcytech.transfer.enumeration.FailedReason;
 import com.darcytech.transfer.model.ElasticIndexMapping;
+import com.darcytech.transfer.model.FailedData;
 import com.darcytech.transfer.model.TradeRate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,18 +43,21 @@ public class NewTradeRateDao {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private List<ElasticIndexMapping> customerIndices;
+    private List<ElasticIndexMapping> indexMappings;
 
     @Autowired
-    private EntityManager entityManager;
+    private TransferEntityDao transferEntityDao;
+
+    @Autowired
+    private ElasticIndexMappingDao elasticIndexMappingDao;
 
     public void bulkSave(List<TradeRate> tradeRates) throws Exception {
 
         if (tradeRates.isEmpty()) {
             return;
         }
-        if (customerIndices == null) {
-            customerIndices = getIndices();
+        if (indexMappings == null) {
+            indexMappings = elasticIndexMappingDao.getIndexMappingList();
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -63,8 +66,8 @@ public class NewTradeRateDao {
 
             String userIndex = null;
             String tradeRateIndex = null;
-            for (ElasticIndexMapping customerIndex : customerIndices) {
-                if (customerIndex.getId().equals(tradeRate.getUserId())) {
+            for (ElasticIndexMapping customerIndex : indexMappings) {
+                if (customerIndex.getUserId().equals(tradeRate.getUserId())) {
                     userIndex = customerIndex.getCustomerIndex();
                 }
             }
@@ -72,6 +75,17 @@ public class NewTradeRateDao {
             if (userIndex != null) {
                 tradeRateIndex = "traderate_" + new SimpleDateFormat("yyyyMM").format(tradeRate.getCreatedTime()) + userIndex.substring(userIndex.indexOf("_"));
             } else {
+                FailedData failedData = new FailedData();
+
+                failedData.setProdId(tradeRate.getId());
+                failedData.setUserId(tradeRate.getUserId());
+                failedData.setBuyerNick(tradeRate.getNick());
+                failedData.setType(FailedDataType.TRADERATE);
+                failedData.setReason(FailedReason.CANT_FIND_USERID);
+                failedData.setTransferTime(tradeRate.getCreatedTime());
+
+                transferEntityDao.persist(failedData);
+
                 throw new Exception("can`t find this customer(" + tradeRate.getUserId() + ") index for traderate.");
             }
             stringBuilder.append("{ \"index\" : { \"_index\" : \"")
@@ -113,13 +127,6 @@ public class NewTradeRateDao {
             throw new IOException(String.valueOf(errorString));
         }
 
-    }
-
-    private List<ElasticIndexMapping> getIndices() {
-            StringBuilder hql = new StringBuilder();
-            hql.append(" from CustomerIndexMapping");
-            Query q = entityManager.createQuery(hql.toString());
-            return q.getResultList();
     }
 
     public String getIndexByUserId(String userId) throws IOException {

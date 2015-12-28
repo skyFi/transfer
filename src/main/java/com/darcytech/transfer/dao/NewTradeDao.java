@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.darcytech.transfer.enumeration.FailedDataType;
+import com.darcytech.transfer.enumeration.FailedReason;
+import com.darcytech.transfer.model.ElasticIndexMapping;
+import com.darcytech.transfer.model.FailedData;
 import com.darcytech.transfer.model.Order;
 import com.darcytech.transfer.model.Trade;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -40,17 +44,51 @@ public class NewTradeDao {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ElasticIndexMappingDao elasticIndexMappingDao;
+
+    @Autowired
+    private TransferEntityDao transferEntityDao;
+
+    private List<ElasticIndexMapping> indexMappings;
+
     public void bulkSave(List<Trade> trades) throws IOException {
 
         if (trades.isEmpty()) {
             return;
         }
+
+        if (indexMappings == null) {
+            indexMappings = elasticIndexMappingDao.getIndexMappingList();
+        }
         StringBuilder stringBuilder = new StringBuilder();
 
         for (Trade trade : trades) {
+
+            String userIndex = null;
+            for (ElasticIndexMapping customerIndex : indexMappings) {
+                if (customerIndex.getUserId().equals(trade.getUserId())) {
+                    userIndex = customerIndex.getCustomerIndex();
+                }
+            }
+
+            if (userIndex == null) {
+                FailedData failedData = new FailedData();
+
+                failedData.setProdId(trade.getId());
+                failedData.setUserId(trade.getUserId());
+                failedData.setBuyerNick(trade.getNick());
+                failedData.setType(FailedDataType.TRADE);
+                failedData.setReason(FailedReason.CANT_FIND_USERID);
+                failedData.setTransferTime(trade.getLastModifyTime());
+
+                transferEntityDao.persist(failedData);
+                throw new IOException("can`t find user index.");
+            }
+
             String customerId = trade.getUserId() + "_" + trade.getNick();
             stringBuilder.append("{ \"update\" : { \"_index\" : \"")
-                    .append(trade.getUserId())
+                    .append(userIndex)
                     .append("\", ")
                     .append("\"_type\" : \"CustomerDetail\", ")
                     .append("\"_id\" : \"")
@@ -59,13 +97,33 @@ public class NewTradeDao {
                     .append("\n");
 
             if (trade.getOrders() == null) {
+
+                FailedData failedData = new FailedData();
+
+                failedData.setProdId(trade.getId());
+                failedData.setUserId(trade.getUserId());
+                failedData.setBuyerNick(trade.getNick());
+                failedData.setType(FailedDataType.DIRTY);
+                failedData.setReason(FailedReason.TRADE_HAS_NO_ORDERS);
+                failedData.setOids(Arrays.toString(trade.getOids().toArray()));
+                failedData.setTransferTime(trade.getLastModifyTime());
+
+                transferEntityDao.persist(failedData);
+
                 logger.error("Trade has no orders, tid: " + trade.getId() + " oids: " + Arrays.toString(trade.getOids().toArray()));
             } else {
                 for (Order order : trade.getOrders()) {
+
+                    order.setShippingNo(trade.getShippingNo());
+                    order.setShippingCompanyName(trade.getShippingCompanyName());
+
                     order.setCustomerId(null);
                     order.setTradeId(null);
                 }
             }
+
+            trade.setShippingCompanyName(null);
+            trade.setShippingNo(null);
 
             trade.setUserId(null);
             trade.setCustomerId(null);

@@ -1,15 +1,21 @@
 package com.darcytech.transfer.job;
 
-import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.darcytech.transfer.dao.RecordDataDao;
+import com.darcytech.transfer.dao.TransferEntityDao;
+import com.darcytech.transfer.enumeration.RecordTableName;
+import com.darcytech.transfer.model.CustomerDetail;
+import com.darcytech.transfer.model.CustomerRecord;
 import com.darcytech.transfer.transfer.CustomerTransferrer;
 
 /**
@@ -24,9 +30,23 @@ public class CustomerTransferJob extends AbstractTransferJob{
     @Value("${transfer.customer.worker.count}")
     private int transferCustomerWorkerCount;
 
+    @Autowired
+    private RecordDataDao recordDataDao;
+
+    @Autowired
+    private TransferEntityDao transferEntityDao;
+
     @Override
-    protected File getRecordFile() throws IOException {
-        return new File("transferred-customer.rcd");
+    protected void saveTransferRecord(String transferDay) throws Exception {
+
+        Date start = new SimpleDateFormat("yyyy-MM-dd").parse(transferDay);
+        Date end = new DateTime(start).plusDays(1).toDate();
+        long prodCount = recordDataDao.count(start, end, CustomerDetail.class.getSimpleName());
+
+        CustomerRecord customerRecord = new CustomerRecord();
+        customerRecord.setTransferDay(transferDay);
+        customerRecord.setTotalCount(prodCount);
+        transferEntityDao.persist(customerRecord);
     }
 
     @Override
@@ -43,6 +63,11 @@ public class CustomerTransferJob extends AbstractTransferJob{
             tokens.add(i);
         }
         return tokens;
+    }
+
+    @Override
+    protected List<String> getTransferDays() {
+        return recordDataDao.getTransferredDays(RecordTableName.customer_record);
     }
 
 }

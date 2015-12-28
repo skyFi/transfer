@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.darcytech.transfer.TransferMain;
-import com.darcytech.transfer.dao.AliasDao;
+import com.darcytech.transfer.dao.ElasticIndexMappingDao;
 
 /**
  * Created by darcy on 2015/12/2.
@@ -21,20 +21,20 @@ import com.darcytech.transfer.dao.AliasDao;
 @Configuration
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(TransferMain.class)
-public class AliasDaoTest {
+public class ElasticIndexMappingDaoTest {
 
     @Autowired
-    private AliasDao aliasDao;
+    private ElasticIndexMappingDao elasticIndexMappingDao;
 
     @Test
     public void testGetAliases() throws Exception {
-        List<String> aliases = aliasDao.getNewAliases();
+        List<String> aliases = elasticIndexMappingDao.getMappedUsers();
         Assert.assertFalse(aliases.isEmpty());
     }
 
     @Test
     public void testGetIndexDocCounts() throws IOException {
-        Map<String, Long> indexDocCounts = aliasDao.getIndexDocCounts();
+        Map<String, Long> indexDocCounts = elasticIndexMappingDao.getIndexDocCounts();
         Assert.assertFalse(indexDocCounts.isEmpty());
         Assert.assertEquals(indexDocCounts.get("index_0"), new Long(60587));
     }

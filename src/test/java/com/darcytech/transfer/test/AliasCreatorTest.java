@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.darcytech.transfer.TransferMain;
-import com.darcytech.transfer.job.AliasCreateJob;
+import com.darcytech.transfer.job.IndexMappingCreateJob;
 
 /**
  * Created by darcy on 2015/12/2.
@@ -20,10 +20,10 @@ import com.darcytech.transfer.job.AliasCreateJob;
 public class AliasCreatorTest {
 
     @Autowired
-    private AliasCreateJob aliasCreateJob;
+    private IndexMappingCreateJob indexMappingCreateJob;
 
     @Test
     public void testCreateAliases() throws Exception {
-        aliasCreateJob.createAliases();
+        indexMappingCreateJob.createElasticIndexMapping();
     }
 }

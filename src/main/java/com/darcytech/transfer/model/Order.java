@@ -68,9 +68,35 @@ public class Order {
     private Set<String> orderFrom;
 
     /**
+     * 快递单号
+     */
+    private String shippingNo;
+
+    /**
+     * 快递公司名称
+     */
+    private String shippingCompanyName;
+
+    /**
      * trade的status
      */
     private TradeStatus status;
+
+    public String getShippingNo() {
+        return shippingNo;
+    }
+
+    public void setShippingNo(String shippingNo) {
+        this.shippingNo = shippingNo;
+    }
+
+    public String getShippingCompanyName() {
+        return shippingCompanyName;
+    }
+
+    public void setShippingCompanyName(String shippingCompanyName) {
+        this.shippingCompanyName = shippingCompanyName;
+    }
 
     public TradeStatus getStatus() {
         return status;
