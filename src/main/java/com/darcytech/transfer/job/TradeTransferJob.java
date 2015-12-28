@@ -2,15 +2,24 @@ package com.darcytech.transfer.job;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.darcytech.transfer.dao.RecordDataDao;
+import com.darcytech.transfer.dao.TransferEntityDao;
+import com.darcytech.transfer.enumeration.RecordTableName;
+import com.darcytech.transfer.model.Trade;
+import com.darcytech.transfer.model.TradeRate;
+import com.darcytech.transfer.model.TradeRateRecord;
+import com.darcytech.transfer.model.TradeRecord;
 import com.darcytech.transfer.transfer.TradeTransferrer;
 
 /**
@@ -25,9 +34,22 @@ public class TradeTransferJob extends AbstractTransferJob{
     @Autowired
     private TradeTransferrer tradeTransferrer;
 
+    @Autowired
+    private RecordDataDao recordDataDao;
+
+    @Autowired
+    private TransferEntityDao transferEntityDao;
+
     @Override
     protected void saveTransferRecord(String transferDay) throws Exception {
+        Date start = new SimpleDateFormat("yyyy-MM-dd").parse(transferDay);
+        Date end = new DateTime(start).plusDays(1).toDate();
+        long prodCount = recordDataDao.count(start, end, Trade.class.getSimpleName());
 
+        TradeRecord tradeRecord = new TradeRecord();
+        tradeRecord.setTransferDay(transferDay);
+        tradeRecord.setTotalCount(prodCount);
+        transferEntityDao.persist(tradeRecord);
     }
 
     @Override
@@ -48,6 +70,6 @@ public class TradeTransferJob extends AbstractTransferJob{
 
     @Override
     protected List<String> getTransferDays() {
-        return null;
+        return recordDataDao.getTransferredDays(RecordTableName.trade_record);
     }
 }

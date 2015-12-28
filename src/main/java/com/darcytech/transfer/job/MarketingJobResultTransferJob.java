@@ -1,14 +1,23 @@
 package com.darcytech.transfer.job;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.darcytech.transfer.dao.RecordDataDao;
+import com.darcytech.transfer.dao.TransferEntityDao;
+import com.darcytech.transfer.enumeration.RecordTableName;
+import com.darcytech.transfer.model.MarketingJobResult;
+import com.darcytech.transfer.model.MarketingJobResultOrder;
+import com.darcytech.transfer.model.MarketingJobResultOrderRecord;
+import com.darcytech.transfer.model.MarketingJobResultRecord;
 import com.darcytech.transfer.transfer.MarketingJobResultTransferrer;
 
 /**
@@ -23,9 +32,22 @@ public class MarketingJobResultTransferJob extends AbstractTransferJob{
     @Autowired
     private MarketingJobResultTransferrer marketingJobResultTransferrer;
 
+    @Autowired
+    private RecordDataDao recordDataDao;
+
+    @Autowired
+    private TransferEntityDao transferEntityDao;
+
     @Override
     protected void saveTransferRecord(String transferDay) throws Exception {
+        Date start = new SimpleDateFormat("yyyy-MM-dd").parse(transferDay);
+        Date end = new DateTime(start).plusDays(1).toDate();
+        long prodCount = recordDataDao.count(start, end, MarketingJobResult.class.getSimpleName());
 
+        MarketingJobResultRecord marketingJobResultRecord = new MarketingJobResultRecord();
+        marketingJobResultRecord.setTransferDay(transferDay);
+        marketingJobResultRecord.setTotalCount(prodCount);
+        transferEntityDao.persist(marketingJobResultRecord);
     }
 
     @Override
@@ -48,6 +70,6 @@ public class MarketingJobResultTransferJob extends AbstractTransferJob{
 
     @Override
     protected List<String> getTransferDays() {
-        return null;
+        return recordDataDao.getTransferredDays(RecordTableName.marketing_job_result_record);
     }
 }

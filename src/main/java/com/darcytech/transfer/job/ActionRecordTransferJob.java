@@ -16,8 +16,6 @@ import com.darcytech.transfer.dao.TransferEntityDao;
 import com.darcytech.transfer.enumeration.RecordTableName;
 import com.darcytech.transfer.model.ActionRecord;
 import com.darcytech.transfer.model.ActionRecordRecord;
-import com.darcytech.transfer.model.CustomerDetail;
-import com.darcytech.transfer.model.CustomerRecord;
 import com.darcytech.transfer.transfer.ActionRecordTransferrer;
 
 /**
@@ -70,6 +68,6 @@ public class ActionRecordTransferJob extends AbstractTransferJob{
 
     @Override
     protected List<String> getTransferDays() {
-        return recordDataDao.getTransferredDays(RecordTableName.customer_record);
+        return recordDataDao.getTransferredDays(RecordTableName.action_record_record);
     }
 }

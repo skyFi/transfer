@@ -27,12 +27,6 @@ public class ElasticIndexMappingDaoTest {
     private ElasticIndexMappingDao elasticIndexMappingDao;
 
     @Test
-    public void testGetAliases() throws Exception {
-        List<String> aliases = elasticIndexMappingDao.getMappedUsers();
-        Assert.assertFalse(aliases.isEmpty());
-    }
-
-    @Test
     public void testGetIndexDocCounts() throws IOException {
         Map<String, Long> indexDocCounts = elasticIndexMappingDao.getIndexDocCounts();
         Assert.assertFalse(indexDocCounts.isEmpty());
