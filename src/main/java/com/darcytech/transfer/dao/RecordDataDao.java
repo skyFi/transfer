@@ -29,10 +29,16 @@ public class RecordDataDao {
 
     public List<String> getTransferredDays(RecordTableName tableName) {
 
-        String sql = "select transfer_day from " + tableName.name();
+        String sql = " select transfer_day from " + tableName.name();
 
         return jdbcTemplate.queryForList(sql, String.class);
 
+    }
+
+    public long getTotalCount(String transferDay, RecordTableName tableName) {
+        String sql = " select total_count from " + tableName.name() + " where transfer_day = ? ";
+
+        return jdbcTemplate.queryForObject(sql, Long.class, transferDay);
     }
 
     public long count(Date startTime, Date endTime, String type) {

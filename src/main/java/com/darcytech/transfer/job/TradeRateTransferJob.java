@@ -14,10 +14,9 @@ import org.springframework.stereotype.Component;
 import com.darcytech.transfer.dao.RecordDataDao;
 import com.darcytech.transfer.dao.TransferEntityDao;
 import com.darcytech.transfer.enumeration.RecordTableName;
-import com.darcytech.transfer.model.Refund;
-import com.darcytech.transfer.model.RefundRecord;
+import com.darcytech.transfer.enumeration.RecordType;
+import com.darcytech.transfer.model.Record;
 import com.darcytech.transfer.model.TradeRate;
-import com.darcytech.transfer.model.TradeRateRecord;
 import com.darcytech.transfer.transfer.TradeRateTransferrer;
 
 /**
@@ -44,9 +43,10 @@ public class TradeRateTransferJob extends AbstractTransferJob{
         Date end = new DateTime(start).plusDays(1).toDate();
         long prodCount = recordDataDao.count(start, end, TradeRate.class.getSimpleName());
 
-        TradeRateRecord tradeRateRecord = new TradeRateRecord();
+        Record tradeRateRecord = new Record();
         tradeRateRecord.setTransferDay(transferDay);
         tradeRateRecord.setTotalCount(prodCount);
+        tradeRateRecord.setRecordType(RecordType.TRADERATE);
         transferEntityDao.persist(tradeRateRecord);
     }
 

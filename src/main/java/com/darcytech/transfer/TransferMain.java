@@ -1,5 +1,6 @@
 package com.darcytech.transfer;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -31,8 +32,9 @@ import com.darcytech.transfer.check.CheckCustomerJob;
 import com.darcytech.transfer.check.CheckTradeJob;
 import com.darcytech.transfer.check.OnlyTradeJob;
 import com.darcytech.transfer.job.ActionRecordTransferJob;
-import com.darcytech.transfer.job.IndexMappingCreateJob;
+import com.darcytech.transfer.job.CorrectCustomerDetailJob;
 import com.darcytech.transfer.job.CustomerTransferJob;
+import com.darcytech.transfer.job.IndexMappingCreateJob;
 import com.darcytech.transfer.job.MarketingJobResultOrderTransferJob;
 import com.darcytech.transfer.job.MarketingJobResultTransferJob;
 import com.darcytech.transfer.job.RefundTransferJob;
@@ -72,7 +74,9 @@ public class TransferMain {
             ApplicationContext context = SpringApplication.run(TransferMain.class, args);
             String mode = args[0];
 
-            if ("check".equals(mode)) {
+            if ("clean".equals(mode)) {
+                runClean(context);
+            } else if ("check".equals(mode)) {
                 runCheck(context);
             } else if (mode == null || "transfer".equals(mode)) {
                 runTransfer(context);
@@ -88,7 +92,16 @@ public class TransferMain {
 
     }
 
+    private static void runClean(ApplicationContext context) throws Exception {
+
+        logger.info("start correcting repeat customer detail ......");
+        CorrectCustomerDetailJob correctCustomerDetailJob = context.getBean(CorrectCustomerDetailJob.class);
+        correctCustomerDetailJob.doCorrectCustomerDetail();
+        logger.info("correcting repeat customer detail complete.");
+    }
+
     private static void runCheck(ApplicationContext context) throws Exception {
+
         logger.info("start testing customer......");
         CheckCustomerJob checkCustomerJob = context.getBean(CheckCustomerJob.class);
         checkCustomerJob.test();
@@ -106,6 +119,7 @@ public class TransferMain {
     }
 
     private static void runTransfer(ApplicationContext context) throws Exception {
+
         logger.info("start es to es transferring......");
         logger.info("start creating index map......");
         IndexMappingCreateJob indexMappingCreateJob = context.getBean(IndexMappingCreateJob.class);

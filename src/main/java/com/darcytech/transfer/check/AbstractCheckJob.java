@@ -1,19 +1,20 @@
 package com.darcytech.transfer.check;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.elasticsearch.common.joda.time.DateTime;
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by darcy on 2015/12/25.
  */
+@Component
 public abstract class AbstractCheckJob {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -29,6 +30,9 @@ public abstract class AbstractCheckJob {
 
     @Autowired
     private CheckProdCustomerDao checkProdCustomerDao;
+
+    @Autowired
+    private RepeatDataDao repeatDataDao;
 
     public void test() {
 
@@ -48,6 +52,8 @@ public abstract class AbstractCheckJob {
     protected abstract long getProdCount(Date start, Date end);
 
     protected abstract long getFailedCount(Date start, Date end);
+
+    protected abstract long getTotalCount(String transferDay);
 
     private void testRandomDay() throws Exception{
 
@@ -71,6 +77,7 @@ public abstract class AbstractCheckJob {
             long prodCount = getProdCount(start, end);
             long failedCount = getFailedCount(start, end);
             long missing = prodCount - newCount - failedCount;
+            long repeatCount = repeatDataDao.count(start, end);
 
             if ( missing > 0 && leastData > newCount) {
                 leastData = newCount;
@@ -78,8 +85,14 @@ public abstract class AbstractCheckJob {
                 leastEndTime = end;
             }
 
-            logger.debug("{} ~ {}. missing: {}, prod: {}, new: {}. failed: {}.",
-                    simpleDateFormat.format(start), simpleDateFormat.format(end), missing, prodCount, newCount, failedCount);
+            if (missing < 0) {
+                long escapeCount = getTotalCount(simpleDateFormat.format(start)) - prodCount;
+                logger.debug("{} ~ {}. missing: {}, escape: {}, repeat: {}, prod: {}, new: {}. failed: {}.",
+                        simpleDateFormat.format(start), simpleDateFormat.format(end), missing, escapeCount, repeatCount, prodCount, newCount, failedCount);
+            } else {
+                logger.debug("{} ~ {}. missing: {}, repeat: {}, prod: {}, new: {}. failed: {}.",
+                        simpleDateFormat.format(start), simpleDateFormat.format(end), missing, repeatCount, prodCount, newCount, failedCount);
+            }
         }
 
         if (leastStartTime != null) {
@@ -100,7 +113,7 @@ public abstract class AbstractCheckJob {
 
         while (start.before(endTime)) {
 
-            Date end = new org.joda.time.DateTime(start).plusDays(1).toDate();
+            Date end = new DateTime(start).plusDays(1).toDate();
             long newCount = getNewCount(start, end);
             long prodCount = getProdCount(start, end);
             long failedCount = getFailedCount(start, end);
@@ -112,8 +125,14 @@ public abstract class AbstractCheckJob {
                 leastEndTime = end;
             }
 
-            logger.debug("{} ~ {}. missing: {}, prod: {}, new: {}. failed: {}.",
-                    simpleDateFormat.format(start), simpleDateFormat.format(end), missing, prodCount, newCount, failedCount);
+            if (missing < 0) {
+                long escapeCount = getTotalCount(simpleDateFormat.format(start)) - prodCount;
+                logger.debug("{} ~ {}. missing: {}, escape: {}  prod: {}, new: {}. failed: {}.",
+                        simpleDateFormat.format(start), simpleDateFormat.format(end), missing, escapeCount, prodCount, newCount, failedCount);
+            } else {
+                logger.debug("{} ~ {}. missing: {}, prod: {}, new: {}. failed: {}.",
+                        simpleDateFormat.format(start), simpleDateFormat.format(end), missing, prodCount, newCount, failedCount);
+            }
 
             start = new DateTime(start).plusDays(1).toDate();
         }

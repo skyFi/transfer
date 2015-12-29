@@ -7,8 +7,6 @@ import java.util.Set;
 
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +18,6 @@ import com.darcytech.transfer.enumeration.FailedDataType;
 import com.darcytech.transfer.enumeration.FailedReason;
 import com.darcytech.transfer.model.CustomerDetail;
 import com.darcytech.transfer.model.FailedData;
-import com.darcytech.transfer.model.RepeatCustomer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -28,8 +25,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 @Component
 public class CustomerTransferrer extends AbstractTransferrer {
-
-    private final Logger logger = LoggerFactory.getLogger(CustomerTransferrer.class);
 
     @Autowired
     private ProdCustomerDao prodCustomerDao;

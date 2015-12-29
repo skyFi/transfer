@@ -1,13 +1,13 @@
 package com.darcytech.transfer.dao;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
 import org.elasticsearch.action.search.SearchRequestBuilder;
@@ -18,6 +18,9 @@ import org.elasticsearch.cluster.metadata.AliasMetaData;
 import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.FilterBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilder;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
@@ -25,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.darcytech.transfer.model.CustomerDetail;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Created by darcy on 2015/11/30.
@@ -34,6 +38,9 @@ public class ProdCustomerDao {
 
     @Autowired
     private Client esClient;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     private Set<String> existsUsers;
 
@@ -95,4 +102,27 @@ public class ProdCustomerDao {
 
         return existsUsers;
     }
+
+    public List<CustomerDetail> getCustomerDetail(Long userId, String nick) throws IOException {
+
+        List<CustomerDetail> customerDetails = new ArrayList<>();
+
+        QueryBuilder queryBuilder = QueryBuilders.boolQuery()
+                .must(QueryBuilders.termQuery("userId", userId))
+                .must(QueryBuilders.termQuery("nick", nick));
+
+        SearchRequestBuilder requestBuilder = esClient.prepareSearch("hermes")
+                .setTypes(CustomerDetail.class.getSimpleName())
+                .setQuery(queryBuilder);
+
+        SearchResponse response = requestBuilder.execute().actionGet();
+
+        for (SearchHit searchHit : response.getHits()) {
+            CustomerDetail customerDetail = objectMapper.readValue(searchHit.getSourceAsString(), CustomerDetail.class);
+            customerDetails.add(customerDetail);
+        }
+
+        return customerDetails;
+    }
+
 }

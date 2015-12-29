@@ -33,7 +33,7 @@ public class OnlyTradeJob {
         for (CustomerDetail customerDetail : customerDetails) {
 
             transferRecorder.writeRecord(String.valueOf(customerDetail), onlyTrade);
-            logger.debug("only have trade customer data: {}. \n",
+            logger.debug("only have trade customer data: {}. ",
                     String.valueOf(customerDetail));
         }
     }

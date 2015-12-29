@@ -14,8 +14,9 @@ import org.springframework.stereotype.Component;
 import com.darcytech.transfer.dao.RecordDataDao;
 import com.darcytech.transfer.dao.TransferEntityDao;
 import com.darcytech.transfer.enumeration.RecordTableName;
+import com.darcytech.transfer.enumeration.RecordType;
 import com.darcytech.transfer.model.CustomerDetail;
-import com.darcytech.transfer.model.CustomerRecord;
+import com.darcytech.transfer.model.Record;
 import com.darcytech.transfer.transfer.CustomerTransferrer;
 
 /**
@@ -43,9 +44,10 @@ public class CustomerTransferJob extends AbstractTransferJob{
         Date end = new DateTime(start).plusDays(1).toDate();
         long prodCount = recordDataDao.count(start, end, CustomerDetail.class.getSimpleName());
 
-        CustomerRecord customerRecord = new CustomerRecord();
+        Record customerRecord = new Record();
         customerRecord.setTransferDay(transferDay);
         customerRecord.setTotalCount(prodCount);
+        customerRecord.setRecordType(RecordType.CUSTOMERDETAIL);
         transferEntityDao.persist(customerRecord);
     }
 

@@ -1,7 +1,5 @@
 package com.darcytech.transfer.job;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -16,10 +14,9 @@ import org.springframework.stereotype.Component;
 import com.darcytech.transfer.dao.RecordDataDao;
 import com.darcytech.transfer.dao.TransferEntityDao;
 import com.darcytech.transfer.enumeration.RecordTableName;
+import com.darcytech.transfer.enumeration.RecordType;
+import com.darcytech.transfer.model.Record;
 import com.darcytech.transfer.model.Trade;
-import com.darcytech.transfer.model.TradeRate;
-import com.darcytech.transfer.model.TradeRateRecord;
-import com.darcytech.transfer.model.TradeRecord;
 import com.darcytech.transfer.transfer.TradeTransferrer;
 
 /**
@@ -46,9 +43,10 @@ public class TradeTransferJob extends AbstractTransferJob{
         Date end = new DateTime(start).plusDays(1).toDate();
         long prodCount = recordDataDao.count(start, end, Trade.class.getSimpleName());
 
-        TradeRecord tradeRecord = new TradeRecord();
+        Record tradeRecord = new Record();
         tradeRecord.setTransferDay(transferDay);
         tradeRecord.setTotalCount(prodCount);
+        tradeRecord.setRecordType(RecordType.TRADERATE);
         transferEntityDao.persist(tradeRecord);
     }
 

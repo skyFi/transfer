@@ -14,10 +14,9 @@ import org.springframework.stereotype.Component;
 import com.darcytech.transfer.dao.RecordDataDao;
 import com.darcytech.transfer.dao.TransferEntityDao;
 import com.darcytech.transfer.enumeration.RecordTableName;
+import com.darcytech.transfer.enumeration.RecordType;
 import com.darcytech.transfer.model.MarketingJobResult;
-import com.darcytech.transfer.model.MarketingJobResultOrder;
-import com.darcytech.transfer.model.MarketingJobResultOrderRecord;
-import com.darcytech.transfer.model.MarketingJobResultRecord;
+import com.darcytech.transfer.model.Record;
 import com.darcytech.transfer.transfer.MarketingJobResultTransferrer;
 
 /**
@@ -44,9 +43,10 @@ public class MarketingJobResultTransferJob extends AbstractTransferJob{
         Date end = new DateTime(start).plusDays(1).toDate();
         long prodCount = recordDataDao.count(start, end, MarketingJobResult.class.getSimpleName());
 
-        MarketingJobResultRecord marketingJobResultRecord = new MarketingJobResultRecord();
+        Record marketingJobResultRecord = new Record();
         marketingJobResultRecord.setTransferDay(transferDay);
         marketingJobResultRecord.setTotalCount(prodCount);
+        marketingJobResultRecord.setRecordType(RecordType.MARKETINGJOBRESULT);
         transferEntityDao.persist(marketingJobResultRecord);
     }
 
